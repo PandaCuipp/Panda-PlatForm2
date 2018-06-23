@@ -19,7 +19,7 @@ var common = require('../../utils/common');
 
 @connect(({ brinson, loading }) => ({
   brinson,
-  loading: loading.effects['brinson/fetch'],
+  loading: loading.effects['brinson/getBarraData'],
 }))
 export default class BarraList extends Component {
   state = {
@@ -139,10 +139,10 @@ export default class BarraList extends Component {
   }
 
   componentWillUnmount() {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'brinson/clear',
-    });
+    // const { dispatch } = this.props;
+    // dispatch({
+    //   type: 'brinson/clear',
+    // });
   }
 
   //绘制图表1

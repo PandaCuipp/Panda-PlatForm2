@@ -19,7 +19,7 @@ var common = require('../../utils/common');
 
 @connect(({ brinson, loading }) => ({
   brinson,
-  loading: loading.effects['brinson/fetch'],
+  loading: loading.effects['brinson/getBrinson'],
 }))
 export default class BrinsonDetail extends Component {
   state = {
@@ -54,7 +54,7 @@ export default class BrinsonDetail extends Component {
 
     this.props
       .dispatch({
-        type: 'brinson/getBarraData',
+        type: 'brinson/getBrinson',
         payload: { strategy_id, index_code, begin_date, end_date },
       })
       .then(() => {
@@ -102,10 +102,10 @@ export default class BrinsonDetail extends Component {
   }
 
   componentWillUnmount() {
-    const { dispatch } = this.brinson;
-    dispatch({
-      type: 'brinson/clear',
-    });
+    // const { dispatch } = this.brinson;
+    // dispatch({
+    //   type: 'brinson/clear',
+    // });
   }
 
   //下载

@@ -1,4 +1,4 @@
-import { fakeChartData, getBrinsonData, getStrategyInfo,getBarraData,getBarraAnalysisData } from '../services/api';
+import { getBrinsonData, getStrategyInfo,getBarraData,getBarraAnalysisData } from '../services/api';
 
 export default {
   namespace: 'brinson',

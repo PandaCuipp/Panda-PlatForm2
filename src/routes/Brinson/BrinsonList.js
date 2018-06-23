@@ -157,11 +157,11 @@ export default class BrinsonList extends Component {
   }
 
   componentWillUnmount() {
-    console.log('componentWillUnmount');
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'brinson/clear',
-    });
+    // console.log('componentWillUnmount');
+    // const { dispatch } = this.props;
+    // dispatch({
+    //   type: 'brinson/clear',
+    // });
   }
 
   //绘制图表1

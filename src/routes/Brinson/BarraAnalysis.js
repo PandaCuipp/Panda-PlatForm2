@@ -23,7 +23,7 @@ var common = require('../../utils/common');
 
 @connect(({brinson,loading}) => ({
 	brinson,
-	loading: loading.effects['brinson/fetch'],
+	loading: loading.effects['brinson/getBarraAnalysisData'],
 }))
 export default class BarraAnalysis extends Component {
 	state = {
@@ -67,12 +67,12 @@ export default class BarraAnalysis extends Component {
 
 	//生命周期--注销
 	componentWillUnmount() {
-		const {
-			dispatch
-		} = this.props;
-		dispatch({
-			type: 'brinson/clear',
-		});
+		// const {
+		// 	dispatch
+		// } = this.props;
+		// dispatch({
+		// 	type: 'brinson/clear',
+		// });
 	}
 
 	refrushData = (trade_date)=>{

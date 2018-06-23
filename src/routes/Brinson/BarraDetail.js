@@ -101,12 +101,12 @@ export default class BarraDetail extends Component {
 	}
 
 	componentWillUnmount() {
-		const {
-			dispatch
-		} = this.props;
-		dispatch({
-			type: 'brinson/clear',
-		});
+		// const {
+		// 	dispatch
+		// } = this.props;
+		// dispatch({
+		// 	type: 'brinson/clear',
+		// });
 	}
 
 	//下载
