@@ -63,7 +63,6 @@ export default class BrinsonList extends Component {
       })
       .then(() => {
         const { brinsonData } = this.props.brinson;
-
         if (brinsonData == undefined || brinsonData.Error != undefined) {
           return;
         }

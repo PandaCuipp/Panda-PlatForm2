@@ -1,4 +1,4 @@
-import { fakeChartData, getBrinsonData, getStrategyInfo } from '../services/api';
+import { fakeChartData, getBrinsonData, getStrategyInfo,getBarraData,getBarraAnalysisData } from '../services/api';
 
 export default {
   namespace: 'brinson',
@@ -6,15 +6,15 @@ export default {
   state: {
     brinsonData: {},
     strategyInfo: {},
+    barraData:{},
+    barraAnalysisData:{},
   },
 
   effects: {
+    //获取brinson数据明细
     *getBrinson({ payload }, { call, put }) {
       const response = yield call(getBrinsonData, payload);
-      console.log("payload");
-      console.log(payload);
-      console.log("response");
-      console.log(response);
+      
       yield put({
         type: 'save',
         payload: {
@@ -22,12 +22,23 @@ export default {
         },
       });
     },
-    *fetchSalesData(_, { call, put }) {
-      const response = yield call(fakeChartData);
+    //获取barra明细
+    *getBarraData({ payload }, { call, put }) {
+      const response = yield call(getBarraData, payload);
       yield put({
         type: 'save',
         payload: {
-          salesData: response.salesData,
+          barraData: response,
+        },
+      });
+    },
+    //getBarraAnalysisData
+    *getBarraAnalysisData({ payload }, { call, put }) {
+      const response = yield call(getBarraAnalysisData, payload);
+      yield put({
+        type: 'save',
+        payload: {
+          barraAnalysisData: response,
         },
       });
     },
@@ -54,6 +65,8 @@ export default {
       return {
         brinsonData: {},
         strategyInfo: {},
+        barraData:{},
+        barraAnalysisData:{},
       };
     },
   },

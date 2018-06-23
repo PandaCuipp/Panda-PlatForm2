@@ -4,6 +4,11 @@ import request from '../utils/request';
 
 //========================请求Brinson模块数据=============================
 
+//获取策略详情
+export async function getStrategyInfo(params) {
+  return request(`/api2/quant-policymanager/strategy-simple?${stringify(params)}`);
+}
+
 //获取Brinson归因明细
 export async function getBrinsonData(params) {
   console.log("api-getBrinsonData");
@@ -11,9 +16,14 @@ export async function getBrinsonData(params) {
   return request(`/api1/performance/brinson?${stringify(params)}`);
 }
 
-//获取策略详情
-export async function getStrategyInfo(params) {
-  return request(`/api2/quant-policymanager/strategy-simple?${stringify(params)}`);
+//Barra多因子归因明细数据
+export async function getBarraData(params){
+  return request(`/api1/performance/factor_attr?${stringify(params)}`);
+}
+
+//getBarraAnalysisData
+export async function getBarraAnalysisData(params){
+  return request(`/api1/performance/risk_attr?${stringify(params)}`);
 }
 
 //=====================以下是模板用例=========================

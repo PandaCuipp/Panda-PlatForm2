@@ -465,7 +465,7 @@ const barraData = {
     [null, null, null, null, -0.0359005183, -0.054332199, 0.0184316806],
   ],
 };
-//==============
+//======barraAnalysisData========
 var barraAnalysisData = {
   "columns": ["绝对暴露", "基准暴露", "相对暴露", "绝对风险", "相对风险"],
   "index": ["const", "Beta", "Growth", "ResidualVolatility", "EarningsYield", "Momentum", "NonlinearSize", "BooktoPrice", "Leverage", "Liquidity", "Size", "休闲服务", "传媒", "公用事业", "农林牧渔", "化工", "医药生物", "商业贸易", "国防军工", "家用电器", "建筑材料", "建筑装饰", "房地产", "有色金属", "机械设备", "汽车", "电子", "电气设备", "纺织服装", "综合", "计算机", "轻工制造", "通信", "采掘", "钢铁", "银行", "非银金融", "食品饮料", "行业因子", "个股特质", "组合"],

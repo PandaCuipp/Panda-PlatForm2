@@ -24,10 +24,13 @@ var common = require('../../utils/common');
 export default class BrinsonDetail extends Component {
   state = {
     currentTabKey: '2',
-    //display1:display1,
+    columns: [],
+    tableData: [],
+    strategyInfo: {},
   };
 
   componentDidMount() {
+
     const strategy_id = common.getParamFromURLOrCookie('strategy_id', true);
     const index_code = common.getParamFromURLOrCookie('index_code', true);
     const begin_date = common.getParamFromURLOrCookie('begin_date', true);
@@ -51,7 +54,8 @@ export default class BrinsonDetail extends Component {
 
     this.props
       .dispatch({
-        type: 'brinson/getBrinson', //获取模拟的data数据
+        type: 'brinson/getBarraData',
+        payload: { strategy_id, index_code, begin_date, end_date },
       })
       .then(() => {
         const { brinsonData } = this.props.brinson;

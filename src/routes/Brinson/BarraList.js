@@ -17,27 +17,51 @@ var $ = require('jquery');
 var exportExcel = require('../../utils/exportExcel');
 var common = require('../../utils/common');
 
-@connect(({ chart, loading }) => ({
-  chart,
-  loading: loading.effects['chart/fetch'],
+@connect(({ brinson, loading }) => ({
+  brinson,
+  loading: loading.effects['brinson/fetch'],
 }))
 export default class BarraList extends Component {
   state = {
     currentTabKey: '3',
-    //display1:display1,
+    columns: [],
+    tableData: [],
+    columns2: [],
+    tableData2: [],
+    strategyInfo: {},
   };
 
   componentDidMount() {
+    const strategy_id = common.getParamFromURLOrCookie('strategy_id', true);
+    const index_code = common.getParamFromURLOrCookie('index_code', true);
+    const begin_date = common.getParamFromURLOrCookie('begin_date', true);
+    const end_date = common.getParamFromURLOrCookie('end_date', true);
+
+    this.setState({
+      begin_date: begin_date,
+      end_date: end_date,
+    });
+
+
     this.props
       .dispatch({
-        type: 'chart/fetch',
+        type: 'brinson/getStrategyInfo',
+        payload: { strategy_id },
       })
       .then(() => {
-        const { barraData } = this.props.chart;
-        if (!barraData) {
+        this.setState({ strategyInfo: this.props.brinson.strategyInfo });
+      });
+
+
+    this.props
+      .dispatch({
+        type: 'brinson/getBarraData',
+        payload: { strategy_id, index_code, begin_date, end_date },
+      }).then(() => {
+        const { barraData } = this.props.brinson;
+        if (barraData == undefined || barraData.Error != undefined) {
           return;
         }
-
         const ExContribution = [];
         const ComContribution = [];
         var BarraDetailData = barraData;
@@ -112,27 +136,12 @@ export default class BarraList extends Component {
         });
       });
 
-    this.props
-      .dispatch({
-        type: 'chart/getStrategyInfo',
-      })
-      .then(() => {
-        //console.log(this.props.chart.strategyInfo);
-      });
-
-    //获取链接或cookie中的参数
-    this.setState({
-      strategy_id: common.getParamFromURLOrCookie('strategy_id', true),
-      index_code: common.getParamFromURLOrCookie('index_code', true),
-      begin_date: common.getParamFromURLOrCookie('begin_date', true),
-      end_date: common.getParamFromURLOrCookie('end_date', true),
-    });
   }
 
   componentWillUnmount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'chart/clear',
+      type: 'brinson/clear',
     });
   }
 
@@ -284,8 +293,7 @@ export default class BarraList extends Component {
 
   render() {
     const { loading } = this.props;
-    const { columns, columns2, tableData, tableData2 } = this.state;
-    const { strategyInfo } = this.props.chart;
+    const { columns, columns2, tableData, tableData2,strategyInfo } = this.state;
 
     return (
       <Fragment>

@@ -20,30 +20,48 @@ var $ = require("jquery");
 var exportExcel = require('../../utils/exportExcel');
 var common = require('../../utils/common');
 
-@connect(({
-	chart,
-	loading
-}) => ({
-	chart,
-	loading: loading.effects['chart/fetch'],
+@connect(({brinson,loading}) => ({
+	brinson,
+	loading: loading.effects['brinson/getBarraData'],
 }))
 export default class BarraDetail extends Component {
 	state = {
 		currentTabKey: '4',
-		//display1:display1,
+		columns: [],
+	    tableData: [],
+	    strategyInfo: {},
 	};
 
 	componentDidMount() {
-		this.props.dispatch({
-			type: 'chart/fetch', //获取模拟的data数据
-		}).then(() => {
 
-			const {
-				barraData
-			} = this.props.chart;
-			if(!barraData) {
-				return;
-			}
+	const strategy_id = common.getParamFromURLOrCookie('strategy_id', true);
+    const index_code = common.getParamFromURLOrCookie('index_code', true);
+    const begin_date = common.getParamFromURLOrCookie('begin_date', true);
+    const end_date = common.getParamFromURLOrCookie('end_date', true);
+
+    this.setState({
+      begin_date: begin_date,
+      end_date: end_date,
+    });
+
+    this.props
+      .dispatch({
+        type: 'brinson/getStrategyInfo',
+        payload: { strategy_id },
+      })
+      .then(() => {
+        this.setState({ strategyInfo: this.props.brinson.strategyInfo });
+      });
+
+
+		this.props.dispatch({
+			type: 'brinson/getBarraData',
+        	payload: { strategy_id, index_code, begin_date, end_date },
+		}).then(() => {
+			const { barraData } = this.props.brinson;
+	        if (barraData == undefined || barraData.Error != undefined) {
+	          return;
+    		}
 			var indexData = barraData.index;
 			var columnsData = barraData.columns; //行数据
 			var dataData = barraData.data;
@@ -80,20 +98,6 @@ export default class BarraDetail extends Component {
 			});
 		});
 
-		this.props.dispatch({
-			type: 'chart/getStrategyInfo', //获取策略详情：根据策略ID获取策略详情，传入id待解决
-		}).then(() => {
-			console.log(this.props.chart.strategyInfo);
-		})
-
-		//获取链接中的参数值
-		this.setState({
-			strategy_id: common.getParamFromURLOrCookie('strategy_id', true),
-			index_code: common.getParamFromURLOrCookie('index_code', true),
-			begin_date: common.getParamFromURLOrCookie('begin_date', true),
-			end_date: common.getParamFromURLOrCookie('end_date', true),
-		});
-
 	}
 
 	componentWillUnmount() {
@@ -101,7 +105,7 @@ export default class BarraDetail extends Component {
 			dispatch
 		} = this.props;
 		dispatch({
-			type: 'chart/clear',
+			type: 'brinson/clear',
 		});
 	}
 
@@ -114,15 +118,13 @@ export default class BarraDetail extends Component {
 	render() {
 
 		const {
-			chart,
+			brinson,
 			loading
 		} = this.props;
-		const {
-			strategyInfo
-		} = chart;
+		
 		const {
 			columns,
-			tableData
+			tableData,strategyInfo
 		} = this.state;
 
 		return(

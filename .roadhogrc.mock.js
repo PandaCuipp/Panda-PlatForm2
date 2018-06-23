@@ -23,8 +23,11 @@ const proxy = {
 
   //来源于service/api.js
   'GET /api1/performance/brinson': getFakeBrinson.brinsonData,
-  
+
   'GET /api1/performance/factor_attr':getFakeBrinson.barraData,
+
+  ///api1/performance/risk_attr
+  'GET /api1/performance/risk_attr':getFakeBrinson.barraAnalysisData,
 
   //=====================以下是模板用例==================================
   // 支持值为 Object 和 Array

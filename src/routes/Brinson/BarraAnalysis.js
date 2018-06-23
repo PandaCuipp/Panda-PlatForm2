@@ -21,29 +21,72 @@ var $ = require("jquery");
 var exportExcel = require('../../utils/exportExcel');
 var common = require('../../utils/common');
 
-@connect(({
-	chart,
-	loading
-}) => ({
-	chart,
-	loading: loading.effects['chart/fetch'],
+@connect(({brinson,loading}) => ({
+	brinson,
+	loading: loading.effects['brinson/fetch'],
 }))
 export default class BarraAnalysis extends Component {
 	state = {
 		currentTabKey: '5',
+		strategyInfo:{},
+		columns:[],
+		tableData:[],
+		value: moment(new Date().Format("yyyyMMdd")),
+		selectedValue: new Date().Format("yyyyMMdd"),
 	};
 	//生命周期 - 初始化
 	componentDidMount() {
+		console.log("componentDidMount");
+	const strategy_id = common.getParamFromURLOrCookie('strategy_id', true);
+    const index_code = common.getParamFromURLOrCookie('index_code', true);
+    const begin_date = common.getParamFromURLOrCookie('begin_date', true);
+    var trade_date = common.getParamFromURLOrCookie('trade_date', true);
+    if(trade_date || trade_date === ""){
+    	trade_date = begin_date;
+    }
+    //获取链接中的参数值
+	this.setState({
+		strategy_id: strategy_id,
+		index_code: index_code,
+		value: moment(trade_date),
+		selectedValue: trade_date,
+	});
+
+	this.refrushData(trade_date);
+
+    this.props
+      .dispatch({
+        type: 'brinson/getStrategyInfo',
+        payload: { strategy_id },
+      })
+      .then(() => {
+        this.setState({ strategyInfo: this.props.brinson.strategyInfo });
+      });
+
+	}
+
+	//生命周期--注销
+	componentWillUnmount() {
+		const {
+			dispatch
+		} = this.props;
+		dispatch({
+			type: 'brinson/clear',
+		});
+	}
+
+	refrushData = (trade_date)=>{
+		console.log("refrushData:"+trade_date);
+		const {strategy_id, index_code} = this.state;
 		this.props.dispatch({
-			type: 'chart/fetch', //获取模拟的data数据
+			type: 'brinson/getBarraAnalysisData', //获取模拟的data数据
+			payload: { strategy_id, index_code, trade_date },
 		}).then(() => {
 
-			const {
-				barraAnalysisData
-			} = this.props.chart;
-			if(!barraAnalysisData) {
-				return;
-			}
+			const { barraAnalysisData } = this.props.brinson;
+			if (barraAnalysisData == undefined || barraAnalysisData.Error != undefined) {
+	          return;
+    		}
 
 			var indexData = barraAnalysisData.index;
 			var columnsData = barraAnalysisData.columns; //行数据
@@ -77,38 +120,8 @@ export default class BarraAnalysis extends Component {
 			}
 			this.setState({
 				columns: columns,
-				tableData: tableData,
+				tableData: tableData
 			});
-		});
-
-		this.props.dispatch({
-			type: 'chart/getStrategyInfo', //获取策略详情：根据策略ID获取策略详情，传入id待解决
-		}).then(() => {
-			console.log(this.props.chart.strategyInfo);
-		})
-
-		const strategy_id = common.getParamFromURLOrCookie('strategy_id', true);
-		const index_code = common.getParamFromURLOrCookie('index_code', true);
-		var trade_date = '2018-02-28';
-		//获取链接中的参数值
-		this.setState({
-			strategy_id: strategy_id,
-			index_code: index_code,
-			begin_date: common.getParamFromURLOrCookie('begin_date', true),
-			end_date: common.getParamFromURLOrCookie('end_date', true),
-			value: moment(trade_date),
-			selectedValue: trade_date,
-		});
-
-	}
-
-	//生命周期--注销
-	componentWillUnmount() {
-		const {
-			dispatch
-		} = this.props;
-		dispatch({
-			type: 'chart/clear',
 		});
 	}
 
@@ -120,32 +133,26 @@ export default class BarraAnalysis extends Component {
 
 	//选择日期
 	onChange = (date, dateString) => {
-		console.log("onChange");
-		console.log(date);
-		console.log(dateString);
 		this.setState({
 			value: date,
 			selectedValue: dateString,
 		});
-
-		//BarraRiskDetails(strategy_id, index_code, date);
+		this.refrushData(dateString);
 	}
 	render() {
 
 		const {
-			chart,
+			brinson,
 			loading
 		} = this.props;
 		const {
-			strategyInfo
-		} = chart;
-		const {
+			strategyInfo,
 			columns,
 			tableData,
 			selectedValue,
 			value
 		} = this.state;
-		const dateFormat = 'YYYY-MM-DD';
+		const dateFormat = 'YYYYMMDD';
 		return(
 			<Fragment>
         <NavigationBar currentKey={this.state.currentTabKey} />
@@ -155,7 +162,7 @@ export default class BarraAnalysis extends Component {
 	            <p>策略：<span>{strategyInfo.strategy_name}</span></p>
 	          </Col>
 	          <Col md={8} sm={24}>
-	            日期：<DatePicker defaultValue={value} format={dateFormat} onChange={this.onChange } />
+	            日期：<DatePicker allowClear={false} value={value} format={dateFormat} onChange={this.onChange } />
 	          </Col>
 	          <Col md={8} sm={24}>
 	            	<Button type="primary" icon="download" onClick={() => this.downloadExcel('table1', 'Barra风险分析')}>导出Excel</Button>
