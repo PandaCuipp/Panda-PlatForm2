@@ -17,16 +17,14 @@ const server2 = 'https://quant-dev.phfund.com.cn';
 
 // 代码中会兼容本地 service mock 以及部署站点的静态数据
 const proxy = {
-  //=============================正式项目========================================
-
-  //代理服务器：api1
-  //'GET /api1/v1/(.*)': 'http://192.168.250.12:30000', //http://192.168.250.12:30000/performance/brinson
+  //=============================正式项目======================================== 
+  
+  'GET /api2/quant-policymanager/strategy-simple': getFakeBrinson.strategyInfo,
 
   //来源于service/api.js
   'GET /api1/performance/brinson': getFakeBrinson.brinsonData,
-  //'GET /api/v1/performance/brinson': 'https://www.baidu.com',
-
-  'GET /api2/quant-policymanager/strategy-simple': getFakeBrinson.strategyInfo,
+  
+  'GET /api1/performance/factor_attr':getFakeBrinson.barraData,
 
   //=====================以下是模板用例==================================
   // 支持值为 Object 和 Array
