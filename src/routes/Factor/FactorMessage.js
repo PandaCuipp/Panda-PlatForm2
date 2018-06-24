@@ -1,6 +1,6 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-import { Row, Col, Card, Form, Input, Button, Divider, Table, Modal,Select,Upload, message,Icon } from 'antd';
+import { Row, Col, Card, Form, Input, Button, Divider, Table, Modal,Select,Upload, message,Icon,Popconfirm } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 import styles from './FactorMessage.less';
@@ -433,7 +433,9 @@ export default class FactorMessage extends PureComponent {
           <Fragment>
             <a onClick={()=>{this.showModal(2,record)}}>修改</a>
             <Divider type="vertical" />
-            <a onClick={()=>{this.handleDelete(record.factorid)}}>删除</a>
+            <Popconfirm title="确定删除?" onConfirm={()=>{this.handleDelete(record.factorid)}}>
+              <a>删除</a>
+            </Popconfirm>
             <Divider type="vertical" />
             <a href="">提交到部门</a>
           </Fragment>
@@ -476,7 +478,9 @@ export default class FactorMessage extends PureComponent {
           <Fragment>
             <a onClick={()=>{this.showModal(2,record)}}>修改</a>
             <Divider type="vertical" />
-            <a onClick={()=>{this.handleDelete(record.factorid)}}>删除</a>
+            <Popconfirm title="确定删除?" onConfirm={()=>{this.handleDelete(record.factorid)}}>
+              <a>删除</a>
+            </Popconfirm>
           </Fragment>
         ),
       },

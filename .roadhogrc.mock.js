@@ -49,7 +49,7 @@ const proxy = {
   },
 
   //update
-  'PUT /api2/quant-policymanager/factor/(.*)':(req, res) => {
+  'PUT /api2/quant-policymanager/factor/updateid':(req, res) => {
     res.send({
         factorid:'ad83ieka0d321d9vdq3d03ld31ecw040',
         authorcode:'Panda',
@@ -63,7 +63,7 @@ const proxy = {
       });
       return;
   },
-  'DELETE /api2/quant-policymanager/factor':(req, res) => {
+  'DELETE /api2/quant-policymanager/factor/deleteid':(req, res) => {
     res.send({
         factorid:'ad83ieka0d321d9vdq3d03ld31ecw040',
         authorcode:'Panda',

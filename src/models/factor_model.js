@@ -22,6 +22,9 @@ export default {
     },
     *add({payload},{call,put}){
       const response = yield call(factorInfoAdd,payload);
+      console.log("add factorInfo:");
+      console.log(payload);
+      console.log(response);
       yield put({
         type:'save',
         payload:{
@@ -30,12 +33,7 @@ export default {
       });
     },
     *update({payload},{call,put}){
-      var response = {};
-      if(noProxy){
-        response = yield call(factorInfoUpdate,payload);
-      }else{
-        response = payload;
-      }
+      var response = yield call(factorInfoUpdate,payload);
       console.log("update factorInfo:");
       console.log(payload);
       console.log(response);
@@ -47,22 +45,7 @@ export default {
       });
     },
     *delete({payload},{call,put}){
-      var response = {};
-      if(noProxy){
-        response = yield call(factorInfoDelete,payload);
-      }else{
-        response = {
-            factorid:'ad83ieka0d321d9vdq3d03ld31ecw040',
-            authorcode:'Panda',
-            type:'marketvalue',
-            scope:'person',
-            factorname:'just_time_add',
-            factorcode:'adfirst',
-            describe:'刚刚删除的因子',
-            filepath:'',
-            uploaddate:1529498409888,
-          };
-      }
+      var response = yield call(factorInfoDelete,payload);
       console.log("delete factorInfo:");
       console.log(payload);
       console.log(response);
@@ -85,7 +68,7 @@ export default {
       };
     },
     saveDelete(state, { payload }) {
-      console.log("saveDelete");
+      console.log("saveDelete"); 
       console.log(state);
       console.log(payload);
       return state.factorData.filter(item => item.factorid !== payload.id);
