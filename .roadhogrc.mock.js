@@ -63,6 +63,20 @@ const proxy = {
       });
       return;
   },
+  'DELETE /api2/quant-policymanager/factor':(req, res) => {
+    res.send({
+        factorid:'ad83ieka0d321d9vdq3d03ld31ecw040',
+        authorcode:'Panda',
+        type:'marketvalue',
+        scope:'person',
+        factorname:'just_time_add',
+        factorcode:'adfirst',
+        describe:'刚刚删除的因子',
+        filepath:'',
+        uploaddate:1529498409888,
+      });
+      return;
+  },
 
   //upload
   'POST /quant-policymanager/factorfile':(req, res) => {

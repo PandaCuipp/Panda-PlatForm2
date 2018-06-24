@@ -36,7 +36,7 @@ export async function getAllFactorInfoList(){
 //factorInfoAdd
 export async function factorInfoAdd(params){
   if(!params){
-    console.error("factor params undefined:"+ params);
+    console.error("add factor params undefined:"+ params);
     return {};
   }
   return request('/api2/quant-policymanager/factor', {
@@ -51,13 +51,28 @@ export async function factorInfoAdd(params){
 //factorInfoUpdate
 export async function factorInfoUpdate(params){
   if(!params || !params.factorid){
-    console.error("factorid is undefined:"+ params);
+    console.error("update factorid is undefined:"+ params);
     return {};
   }
   return request('/api2/quant-policymanager/factor/'+ params.factorid, {
     method: 'PUT',
     body: {
       ...params,
+      //method: 'put',
+    },
+  });
+}
+
+//factorInfoUpdate
+export async function factorInfoDelete(id){
+  if(!factorid){
+    console.error("delete factorid is undefined:"+ id);
+    return {};
+  }
+  return request('/api2/quant-policymanager/factor/'+ id, {
+    method: 'DELETE',
+    body: {
+      id,
       //method: 'put',
     },
   });

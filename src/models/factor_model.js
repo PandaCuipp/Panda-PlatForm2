@@ -1,5 +1,6 @@
-import { getAllFactorInfoList,factorInfoAdd,factorInfoUpdate } from '../services/api';
-
+import { getAllFactorInfoList,factorInfoAdd,factorInfoUpdate,factorInfoDelete } from '../services/api';
+// 是否禁用代理
+const noProxy = process.env.NO_PROXY === 'true';
 export default {
   namespace: 'factor_model',
 
@@ -19,14 +20,6 @@ export default {
         },
       });
     },
-    *delete({payload},{call,put}){
-      yield put({
-        type:'save',
-        payload:{
-          factorData:state.factorData.filter(item => item.factorid !== payload.factorid),
-        },
-      });
-    },
     *add({payload},{call,put}){
       const response = yield call(factorInfoAdd,payload);
       yield put({
@@ -37,7 +30,12 @@ export default {
       });
     },
     *update({payload},{call,put}){
-      const response = yield call(factorInfoUpdate,payload);
+      var response = {};
+      if(noProxy){
+        response = yield call(factorInfoUpdate,payload);
+      }else{
+        response = payload;
+      }
       console.log("update factorInfo:");
       console.log(payload);
       console.log(response);
@@ -45,6 +43,34 @@ export default {
         type:'save',
         payload:{
           currentFactorInfo:response,
+        },
+      });
+    },
+    *delete({payload},{call,put}){
+      var response = {};
+      if(noProxy){
+        response = yield call(factorInfoDelete,payload);
+      }else{
+        response = {
+            factorid:'ad83ieka0d321d9vdq3d03ld31ecw040',
+            authorcode:'Panda',
+            type:'marketvalue',
+            scope:'person',
+            factorname:'just_time_add',
+            factorcode:'adfirst',
+            describe:'刚刚删除的因子',
+            filepath:'',
+            uploaddate:1529498409888,
+          };
+      }
+      console.log("delte factorInfo:");
+      console.log(payload);
+      console.log(response);
+      yield put({
+        type:'save',
+        payload:{
+          currentFactorInfo:response,
+          factorData:state.factorData.filter(item => item.factorid !== payload.factorid),
         },
       });
     },
