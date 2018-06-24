@@ -41,7 +41,23 @@ const proxy = {
         scope:'person',
         factorname:'just_time_add',
         factorcode:'adfirst',
-        describe:'刚刚新增的个人因子',
+        describe:'刚刚新增的因子',
+        filepath:'',
+        uploaddate:1529498409888,
+      });
+      return;
+  },
+
+  //update
+  'PUT /api2/quant-policymanager/factor/(.*)':(req, res) => {
+    res.send({
+        factorid:'ad83ieka0d321d9vdq3d03ld31ecw040',
+        authorcode:'Panda',
+        type:'marketvalue',
+        scope:'person',
+        factorname:'just_time_add',
+        factorcode:'adfirst',
+        describe:'刚刚修改的因子',
         filepath:'',
         uploaddate:1529498409888,
       });

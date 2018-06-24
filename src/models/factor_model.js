@@ -1,11 +1,11 @@
-import { getAllFactorInfoList,factorInfoAdd } from '../services/api';
+import { getAllFactorInfoList,factorInfoAdd,factorInfoUpdate } from '../services/api';
 
 export default {
   namespace: 'factor_model',
 
   state: {
     factorData:[],
-    addFactorInfo:{},
+    currentFactorInfo:{},
   },
 
   effects: {
@@ -29,17 +29,25 @@ export default {
     },
     *add({payload},{call,put}){
       const response = yield call(factorInfoAdd,payload);
-      console.log("add factorInfo:");
+      yield put({
+        type:'save',
+        payload:{
+          currentFactorInfo:response,
+        },
+      });
+    },
+    *update({payload},{call,put}){
+      const response = yield call(factorInfoUpdate,payload);
+      console.log("update factorInfo:");
       console.log(payload);
       console.log(response);
       yield put({
         type:'save',
         payload:{
-          addFactorInfo:response,
+          currentFactorInfo:response,
         },
       });
     },
-
     // effects end
   },
 
@@ -53,7 +61,7 @@ export default {
     clear() {
       return {
         factorData:[],
-        addFactorInfo:{},
+        currentFactorInfo:{},
       };
     },
   },

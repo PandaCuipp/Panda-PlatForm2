@@ -35,6 +35,10 @@ export async function getAllFactorInfoList(){
 
 //factorInfoAdd
 export async function factorInfoAdd(params){
+  if(!params){
+    console.error("factor params undefined:"+ params);
+    return {};
+  }
   return request('/api2/quant-policymanager/factor', {
     method: 'POST',
     body: {
@@ -43,6 +47,23 @@ export async function factorInfoAdd(params){
     },
   });
 }
+
+//factorInfoUpdate
+export async function factorInfoUpdate(params){
+  if(!params || !params.factorid){
+    console.error("factorid is undefined:"+ params);
+    return {};
+  }
+  return request('/api2/quant-policymanager/factor/'+ params.factorid, {
+    method: 'PUT',
+    body: {
+      ...params,
+      //method: 'put',
+    },
+  });
+}
+
+
 //=====================以下是模板用例=========================
 
 export async function queryProjectNotice() {

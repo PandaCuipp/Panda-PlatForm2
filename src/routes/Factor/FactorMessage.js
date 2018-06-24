@@ -17,6 +17,7 @@ const CreateForm = Form.create()(props => {
     uploading: false,
   }
 
+
   const handleUpload = () => {
     const { fileList } = this.state;
     const formData = new FormData();
@@ -72,36 +73,42 @@ const CreateForm = Form.create()(props => {
       fileList: this.state.fileList,
     };
 
-  const { modalVisible,modalAction,confirmLoading, form, handleAdd, handleModalVisible } = props;
+  const { modalVisible,modalAction,confirmLoading,factorEntity, form, handleAdd, handleModalVisible } = props;
   
-  const okHandle = () => {
-    form.validateFields((err, fieldsValue) => {
-      if (err) return;
-      console.log('fieldsValue')
-      console.log({
-        ...fieldsValue,
-        filepath:'waitfordeal.pyc',
-        authorcode:'currentUser',
-      });
-      //handleUpload();
-      form.resetFields();
-      handleAdd({
-        ...fieldsValue,
-        filepath:'waitfordeal.pyc',
-        authorcode:'currentUser',
-        uploaddate:new Date().getTime(),
-      });
-    });
-  };
+  //初始化弹框数据
   var title='';
   var okText = '';
   if(modalAction ===1){
     title='新增因子';
     okText = '新增';
+    //form.resetFields();
   }else if(modalAction === 2){
     title='修改因子';
     okText = '修改';
+    //form.setFieldsValue(factorEntity);
   }
+
+  const okHandle = () => {
+    form.validateFields((err, fieldsValue) => {
+      if (err) return;
+      console.log('fieldsValue');
+      console.log({
+        ...fieldsValue,
+        authorcode:'currentUser',
+        uploaddate:new Date().getTime(),
+      });
+      //handleUpload();
+      
+      handleAdd(modalAction,{
+        ...fieldsValue,
+        authorcode:'currentUser',
+        uploaddate:new Date().getTime(),
+      });
+
+      form.resetFields();
+    });
+  };
+  
   return (
     <Modal
       title={title}
@@ -112,14 +119,22 @@ const CreateForm = Form.create()(props => {
       okText={okText}
       loading={uploading}
     >
-    <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="因子名称">
+      <FormItem>
+        {form.getFieldDecorator('factorid', {
+          initialValue:factorEntity.factorid,
+        })(<Input type="hidden" placeholder="PE因子" />)}
+      </FormItem>
+
+      <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="因子名称">
         {form.getFieldDecorator('factorname', {
           rules: [{ required: true, message: '请输入因子名称' },
           { max:50, message: '因子名称长度不能超过50个中英文字' },],
+          initialValue:factorEntity.factorname,
         })(<Input placeholder="PE因子" />)}
       </FormItem>
       <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="因子代码">
         {form.getFieldDecorator('factorcode', {
+          initialValue:factorEntity.factorcode,
           rules: [{ required: true, message: '请输入因子代码' },
           { max:50, message: '因子代码长度不能超过50个中英文字' },
           { pattern:'^[a-zA-Z\'\"\?\,\.\<\>\/\;\:\[\]\|\\=\+\-\_\(\)\*\&\%\$\#\@\!\~\`]*$',message:'因子代码只能输入英文字母和特殊字符'},],
@@ -128,7 +143,7 @@ const CreateForm = Form.create()(props => {
 
       <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="因子类型">
         {form.getFieldDecorator('type', {
-            initialValue:'marketvalue',
+            initialValue:factorEntity.type ?? 'marketvalue',
         })(
         <Select style={{ width: 250 }} disabled>
             <Option value="marketvalue">市值因子</Option>
@@ -138,16 +153,17 @@ const CreateForm = Form.create()(props => {
 
       <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="因子范围">
         {form.getFieldDecorator('scope', {
-          initialValue:'person',
+          initialValue:factorEntity.scope ?? 'person',
         })(<Select style={{ width: 250 }} disabled>
             <Option value="person">个人因子</Option>
-            <Option value="department">部分因子</Option>
+            <Option value="department">部门因子</Option>
           </Select>
           )}
       </FormItem>
 
       <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="因子说明">
         {form.getFieldDecorator('describe', {
+          initialValue:factorEntity.describe,
           rules: [{ required: true, message: '请输入因子说明' }],
         })(<TextArea placeholder="因子说明内容" />)}
       </FormItem>
@@ -159,6 +175,12 @@ const CreateForm = Form.create()(props => {
           </Button>
         </Upload>
       </FormItem>
+      <FormItem>
+        {form.getFieldDecorator('filepath', {
+          initialValue:factorEntity.filepath,
+        })(<Input type="hidden" placeholder="文件路径" />)}
+      </FormItem>
+
     </Modal>
   );
 });
@@ -176,6 +198,7 @@ export default class FactorMessage extends PureComponent {
     personDataList: [], //个人因子数据
     departmentDataList: [],//部分因子数据
     modalAction: 1, //1-新增；2-修改
+    factorEntity:{},  //修改的factor实体
     modalVisible: false, //增加、修改框 是否显示
     confirmLoading: false,  //是否正在提交数据库
   };
@@ -230,29 +253,57 @@ export default class FactorMessage extends PureComponent {
     });
   };
 
+  //弹框隐藏
   handleModalVisible = flag => {
     this.setState({
       modalVisible: !!flag,
     });
   };
 
-  handleAdd = fields => {
+  //action:1-新增，2修改；
+  //fields:弹出框字段
+  handleAdd = (action,fields) => {
     console.log("handleAdd:");
     console.log(fields);
-    this.props.dispatch({
-      type: 'factor_model/add',
-      payload: {
-        ...fields
-      },
-    }).then(()=>{
-      message.success('新增成功');
-      this.setState({
-        modalVisible: false,
+
+    //正在上传新增或修改的数据
+    this.setState({
+        confirmLoading: true,
       });
-      //新增成功，重新请求接口
-      this.loadDataList();
-    });
+
+    if(action === 1){ //新增
+        this.props.dispatch({
+        type: 'factor_model/add',
+        payload: {
+          ...fields
+        },}).then(()=>{
+          message.success('新增成功');
+          this.setState({
+            confirmLoading:false,
+            modalVisible: false,
+          });
+          //新增成功，重新请求接口
+          this.loadDataList();
+        });
+    }else if(action === 2){ //修改
+        this.props.dispatch({
+        type: 'factor_model/update',
+        payload: {
+          ...fields
+        },}).then(()=>{
+          message.success('修改成功');
+          this.setState({
+            confirmLoading:false,
+            modalVisible: false,
+          });
+          //新增成功，重新请求接口
+          this.loadDataList();
+        });
+    }
+
+    
   };
+
 
   renderForm() {
     const { getFieldDecorator } = this.props.form;
@@ -271,7 +322,7 @@ export default class FactorMessage extends PureComponent {
             </Button>
           </Col>
           <Col md={8} sm={24}>
-            <Button type="primary" onClick={()=>{this.showModal(1)}}>新增因子</Button>
+            <Button type="primary" onClick={()=>{this.showModal(1,{})}}>新增因子</Button>
           </Col>
         </Row>
       </Form>
@@ -299,20 +350,20 @@ export default class FactorMessage extends PureComponent {
   }
 
   //flag:1-新增；2-修改
-  showModal = (flag) => {
+  showModal = (flag,entity) => {
     console.log("showModal");
-
     this.setState({
       modalAction:flag,
+      factorEntity:entity,
       modalVisible: true,
     });
   }
+
   handleOk = () => {
     if(!this.state.uploading){
       //上传数据
-
       this.setState({
-        //ModalTitle: 'The modal will be closed after two seconds',
+        
         confirmLoading: true,
       });
       setTimeout(() => {
@@ -323,18 +374,18 @@ export default class FactorMessage extends PureComponent {
       }, 2000);
     }
   }
-  handleCancel = () => {
-    console.log('Clicked cancel button');
-    this.setState({
-      modalVisible: false,
-    });
-  };
+  // handleCancel = () => {
+  //   console.log('Clicked cancel button');
+  //   this.setState({
+  //     modalVisible: false,
+  //   });
+  // };
 
   render() {
     console.log("render");
     const {personDataList,departmentDataList} = this.state;
 
-    const { modalVisible, confirmLoading, modalAction } = this.state;
+    const { modalVisible, confirmLoading, modalAction,factorEntity } = this.state;
 
 
     const columns = [
@@ -363,9 +414,9 @@ export default class FactorMessage extends PureComponent {
       },
       {
         title: '操作',
-        render: () => (
+        render: (text,record) => (
           <Fragment>
-            <a href="">修改</a>
+            <a onClick={()=>{this.showModal(2,record)}}>修改</a>
             <Divider type="vertical" />
             <a href="">删除</a>
             <Divider type="vertical" />
@@ -406,9 +457,9 @@ export default class FactorMessage extends PureComponent {
       },
       {
         title: '操作',
-        render: () => (
+        render: (text,record) => (
           <Fragment>
-            <a href="">修改</a>
+            <a onClick={()=>{this.showModal(2,record)}}>修改</a>
             <Divider type="vertical" />
             <a href="">删除</a>
           </Fragment>
@@ -439,7 +490,7 @@ export default class FactorMessage extends PureComponent {
 
         <div>
 
-        <CreateForm {...parentMethods} modalAction={modalAction} modalVisible={modalVisible} confirmLoading={confirmLoading} />
+        <CreateForm {...parentMethods} factorEntity={factorEntity} modalAction={modalAction} modalVisible={modalVisible} confirmLoading={confirmLoading} />
       </div>
 
       </PageHeaderLayout>
