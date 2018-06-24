@@ -8,6 +8,7 @@ import { getNotices } from './mock/notices';
 import { format, delay } from 'roadhog-api-doc';
 
 import { getFakeBrinson } from './mock/brinson';
+import { factorData } from './mock/factor';
 
 // 是否禁用代理
 const noProxy = process.env.NO_PROXY === 'true';
@@ -28,6 +29,34 @@ const proxy = {
 
   ///api1/performance/risk_attr
   'GET /api1/performance/risk_attr':getFakeBrinson.barraAnalysisData,
+
+  'GET /api2/quant-policymanager/factor':factorData,
+
+  //add
+  'POST /api2/quant-policymanager/factor':(req, res) => {
+    res.send({
+        factorid:'ad83ieka0d321d9vdq3d03ld31ecw039',
+        authorcode:'Panda',
+        type:'marketvalue',
+        scope:'person',
+        factorname:'just_time_add',
+        factorcode:'adfirst',
+        describe:'刚刚新增的个人因子',
+        filepath:'',
+        uploaddate:1529498409888,
+      });
+      return;
+  },
+
+  //upload
+  'POST /quant-policymanager/factorfile':(req, res) => {
+    res.send({
+        status: 'ok',
+        type,
+        currentAuthority: 'admin',
+      });
+      return;
+  },
 
   //=====================以下是模板用例==================================
   // 支持值为 Object 和 Array

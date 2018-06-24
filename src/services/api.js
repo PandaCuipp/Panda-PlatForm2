@@ -26,6 +26,23 @@ export async function getBarraAnalysisData(params){
   return request(`/api1/performance/risk_attr?${stringify(params)}`);
 }
 
+//=====================单因子管理==================================
+
+//查询所有因子信息列表
+export async function getAllFactorInfoList(){
+  return request('/api2/quant-policymanager/factor');
+}
+
+//factorInfoAdd
+export async function factorInfoAdd(params){
+  return request('/api2/quant-policymanager/factor', {
+    method: 'POST',
+    body: {
+      ...params,
+      //method: 'post',
+    },
+  });
+}
 //=====================以下是模板用例=========================
 
 export async function queryProjectNotice() {

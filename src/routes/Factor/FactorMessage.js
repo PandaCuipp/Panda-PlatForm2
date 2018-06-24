@@ -1,27 +1,208 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-import { Row, Col, Card, Form, Input, Button, Divider, Table } from 'antd';
+import { Row, Col, Card, Form, Input, Button, Divider, Table, Modal,Select,Upload, message,Icon } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 import styles from './FactorMessage.less';
+var common = require('../../utils/common');
 
 const FormItem = Form.Item;
+const { TextArea } = Input;
+const Option = Select.Option;
 
-@connect(({ rule, loading }) => ({
+const CreateForm = Form.create()(props => {
+
+  this.state = {
+    fileList: [],
+    uploading: false,
+  }
+
+  const handleUpload = () => {
+    const { fileList } = this.state;
+    const formData = new FormData();
+    fileList.forEach((file) => {
+      formData.append('files[]', file);
+    });
+
+    this.setState({
+      uploading: true,
+    });
+
+    // You can use any AJAX library you like
+    reqwest({
+      url: '//jsonplaceholder.typicode.com/posts/',
+      method: 'post',
+      processData: false,
+      data: formData,
+      success: () => {
+        this.setState({
+          fileList: [],
+          uploading: false,
+        });
+        message.success('upload successfully.');
+      },
+      error: () => {
+        this.setState({
+          uploading: false,
+        });
+        message.error('upload failed.');
+      },
+    });
+  }
+
+  const { uploading } = this.state;
+    const uploadProps = {
+      action: '//jsonplaceholder.typicode.com/posts/',
+      onRemove: (file) => {
+        this.setState(({ fileList }) => {
+          const index = fileList.indexOf(file);
+          const newFileList = fileList.slice();
+          newFileList.splice(index, 1);
+          return {
+            fileList: newFileList,
+          };
+        });
+      },
+      beforeUpload: (file) => {
+        this.setState(({ fileList }) => ({
+          fileList: [...fileList, file],
+        }));
+        return false;
+      },
+      fileList: this.state.fileList,
+    };
+
+  const { modalVisible,modalAction,confirmLoading, form, handleAdd, handleModalVisible } = props;
+  
+  const okHandle = () => {
+    form.validateFields((err, fieldsValue) => {
+      if (err) return;
+      console.log('fieldsValue')
+      console.log({
+        ...fieldsValue,
+        filepath:'waitfordeal.pyc',
+        authorcode:'currentUser',
+      });
+      //handleUpload();
+      form.resetFields();
+      handleAdd({
+        ...fieldsValue,
+        filepath:'waitfordeal.pyc',
+        authorcode:'currentUser',
+        uploaddate:new Date().getTime(),
+      });
+    });
+  };
+  var title='';
+  var okText = '';
+  if(modalAction ===1){
+    title='新增因子';
+    okText = '新增';
+  }else if(modalAction === 2){
+    title='修改因子';
+    okText = '修改';
+  }
+  return (
+    <Modal
+      title={title}
+      visible={modalVisible}
+      onOk={okHandle}
+      confirmLoading={confirmLoading}
+      onCancel={() => handleModalVisible()}
+      okText={okText}
+      loading={uploading}
+    >
+    <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="因子名称">
+        {form.getFieldDecorator('factorname', {
+          rules: [{ required: true, message: '请输入因子名称' },
+          { max:50, message: '因子名称长度不能超过50个中英文字' },],
+        })(<Input placeholder="PE因子" />)}
+      </FormItem>
+      <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="因子代码">
+        {form.getFieldDecorator('factorcode', {
+          rules: [{ required: true, message: '请输入因子代码' },
+          { max:50, message: '因子代码长度不能超过50个中英文字' },
+          { pattern:'^[a-zA-Z\'\"\?\,\.\<\>\/\;\:\[\]\|\\=\+\-\_\(\)\*\&\%\$\#\@\!\~\`]*$',message:'因子代码只能输入英文字母和特殊字符'},],
+        })(<Input placeholder="PE" />)}
+      </FormItem>
+
+      <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="因子类型">
+        {form.getFieldDecorator('type', {
+            initialValue:'marketvalue',
+        })(
+        <Select style={{ width: 250 }} disabled>
+            <Option value="marketvalue">市值因子</Option>
+          </Select>
+        )}
+      </FormItem>
+
+      <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="因子范围">
+        {form.getFieldDecorator('scope', {
+          initialValue:'person',
+        })(<Select style={{ width: 250 }} disabled>
+            <Option value="person">个人因子</Option>
+            <Option value="department">部分因子</Option>
+          </Select>
+          )}
+      </FormItem>
+
+      <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="因子说明">
+        {form.getFieldDecorator('describe', {
+          rules: [{ required: true, message: '请输入因子说明' }],
+        })(<TextArea placeholder="因子说明内容" />)}
+      </FormItem>
+
+      <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="因子说明">
+          <Upload {...uploadProps}>
+          <Button>
+            <Icon type="upload" />选择文件
+          </Button>
+        </Upload>
+      </FormItem>
+    </Modal>
+  );
+});
+
+
+
+@connect(({ factor_model,rule, loading }) => ({
+  factor_model,
   rule,
   loading: loading.models.rule,
 }))
 @Form.create()
 export default class FactorMessage extends PureComponent {
   state = {
-    modalVisible: false,
-    formValues: {},
+    personDataList: [], //个人因子数据
+    departmentDataList: [],//部分因子数据
+    modalAction: 1, //1-新增；2-修改
+    modalVisible: false, //增加、修改框 是否显示
+    confirmLoading: false,  //是否正在提交数据库
   };
 
   componentDidMount() {
+    this.loadDataList();
+  }
+
+  loadDataList = ()=>{
     const { dispatch } = this.props;
     dispatch({
-      type: 'rule/fetch',
+      type: 'factor_model/fetch',
+    }).then(()=>{
+
+      const {factorData}=this.props.factor_model;
+      console.log("this.props");
+      console.log(this.props);
+      if(!factorData){
+        return;
+      }
+      //dataSource
+      const personDataList = factorData.filter(item => item.scope === "person");
+      const departmentDataList = factorData.filter(item => item.scope === "department");
+      this.setState({
+        personDataList:personDataList,
+        departmentDataList:departmentDataList,
+      });
     });
   }
 
@@ -56,21 +237,26 @@ export default class FactorMessage extends PureComponent {
   };
 
   handleAdd = fields => {
+    console.log("handleAdd:");
+    console.log(fields);
     this.props.dispatch({
-      type: 'rule/add',
+      type: 'factor_model/add',
       payload: {
-        description: fields.desc,
+        ...fields
       },
-    });
-
-    message.success('添加成功');
-    this.setState({
-      modalVisible: false,
+    }).then(()=>{
+      message.success('新增成功');
+      this.setState({
+        modalVisible: false,
+      });
+      //新增成功，重新请求接口
+      this.loadDataList();
     });
   };
 
   renderForm() {
     const { getFieldDecorator } = this.props.form;
+
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
@@ -85,7 +271,7 @@ export default class FactorMessage extends PureComponent {
             </Button>
           </Col>
           <Col md={8} sm={24}>
-            <Button type="primary">新增因子</Button>
+            <Button type="primary" onClick={()=>{this.showModal(1)}}>新增因子</Button>
           </Col>
         </Row>
       </Form>
@@ -112,63 +298,68 @@ export default class FactorMessage extends PureComponent {
     );
   }
 
-  render() {
-    const {
-      rule: { data },
-      loading,
-    } = this.props;
+  //flag:1-新增；2-修改
+  showModal = (flag) => {
+    console.log("showModal");
 
-    const dataSource = [
-      {
-        key: '1',
-        name: '胡彦斌',
-        code: 32,
-        filename: '西湖区湖底公园1号',
-        updatedAt: '20181111',
-      },
-      {
-        key: '2',
-        name: '胡彦斌',
-        code: 32,
-        filename: '西湖区湖底公园1号',
-        updatedAt: '20181111',
-      },
-      {
-        key: '3',
-        name: '胡彦斌',
-        code: 32,
-        filename: '西湖区湖底公园1号',
-        updatedAt: '20181111',
-      },
-      {
-        key: '4',
-        name: '胡彦斌',
-        code: 32,
-        filename: '西湖区湖底公园1号',
-        updatedAt: '20181111',
-      },
-    ];
+    this.setState({
+      modalAction:flag,
+      modalVisible: true,
+    });
+  }
+  handleOk = () => {
+    if(!this.state.uploading){
+      //上传数据
+
+      this.setState({
+        //ModalTitle: 'The modal will be closed after two seconds',
+        confirmLoading: true,
+      });
+      setTimeout(() => {
+        this.setState({
+          modalVisible: false,
+          confirmLoading: false,
+        });
+      }, 2000);
+    }
+  }
+  handleCancel = () => {
+    console.log('Clicked cancel button');
+    this.setState({
+      modalVisible: false,
+    });
+  };
+
+  render() {
+    console.log("render");
+    const {personDataList,departmentDataList} = this.state;
+
+    const { modalVisible, confirmLoading, modalAction } = this.state;
+
 
     const columns = [
       {
         title: '因子名称',
-        dataIndex: 'name',
-        key: 'name',
+        dataIndex: 'factorname',
+        key: 'factorname',
       },
       {
         title: '因子代码',
-        dataIndex: 'code',
-        key: 'code',
+        dataIndex: 'factorcode',
+        key: 'factorcode',
       },
       {
         title: '文件名称',
-        dataIndex: 'filename',
-        key: 'filename',
+        dataIndex: 'filepath',
+        key: 'filepath',
       },
       {
         title: '上传时间',
-        dataIndex: 'updatedAt',
-        key: 'updatedAt',
+        dataIndex: 'uploaddate',
+        key: 'uploaddate',
+        render:(text,record)=>{
+          return new Date(record.uploaddate).Format('yyyy/MM/dd hh:mm');
+        },
       },
       {
         title: '操作',
@@ -184,66 +375,34 @@ export default class FactorMessage extends PureComponent {
       },
     ];
 
-    const dataSources = [
-      {
-        key: '1',
-        name: '胡彦斌',
-        code: 32,
-        filename: '西湖区湖底公园1号',
-        updatedAt: '20181111',
-        updatedPeo: 'Alin',
-      },
-      {
-        key: '2',
-        name: '胡彦斌',
-        code: 32,
-        filename: '西湖区湖底公园1号',
-        updatedAt: '20181111',
-        updatedPeo: 'Alin',
-      },
-      {
-        key: '3',
-        name: '胡彦斌',
-        code: 32,
-        filename: '西湖区湖底公园1号',
-        updatedAt: '20181111',
-        updatedPeo: 'Alin',
-      },
-      {
-        key: '4',
-        name: '胡彦斌',
-        code: 32,
-        filename: '西湖区湖底公园1号',
-        updatedAt: '20181111',
-        updatedPeo: 'Alin',
-      },
-    ];
-
     const columnss = [
       {
         title: '因子名称',
-        dataIndex: 'name',
-        key: 'name',
+        dataIndex: 'factorname',
+        key: 'factorname',
       },
       {
         title: '因子代码',
-        dataIndex: 'code',
-        key: 'code',
+        dataIndex: 'factorcode',
+        key: 'factorcode',
       },
       {
         title: '文件名称',
-        dataIndex: 'filename',
-        key: 'filename',
+        dataIndex: 'filepath',
+        key: 'filepath',
       },
       {
         title: '提交时间',
-        dataIndex: 'updatedAt',
-        key: 'updatedAt',
+        dataIndex: 'uploaddate',
+        key: 'uploaddate',
+        render:(text,record)=>{
+          return new Date(record.uploaddate).Format('yyyy/MM/dd hh:mm');
+        },
       },
       {
         title: '上传人',
-        dataIndex: 'updatedPeo',
-        key: 'updatedPeo',
+        dataIndex: 'authorcode',
+        key: 'authorcode',
       },
       {
         title: '操作',
@@ -267,16 +426,22 @@ export default class FactorMessage extends PureComponent {
         <Card bordered={true}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderForm()}</div>
-            <Table dataSource={dataSource} columns={columns} />
+            <Table rowKey={record => record.factorid} dataSource={personDataList} columns={columns} />
           </div>
         </Card>
 
         <Card bordered={true} style={{ marginTop: 30 }}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderForms()}</div>
-            <Table dataSource={dataSources} columns={columnss} />
+            <Table rowKey={record => record.factorid} dataSource={departmentDataList} columns={columnss} />
           </div>
         </Card>
+
+        <div>
+
+        <CreateForm {...parentMethods} modalAction={modalAction} modalVisible={modalVisible} confirmLoading={confirmLoading} />
+      </div>
+
       </PageHeaderLayout>
     );
   }
