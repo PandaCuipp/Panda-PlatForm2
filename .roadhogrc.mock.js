@@ -8,7 +8,7 @@ import { getNotices } from './mock/notices';
 import { format, delay } from 'roadhog-api-doc';
 
 import { getFakeBrinson } from './mock/brinson';
-import { factorData } from './mock/factor';
+import { factorData,upload } from './mock/factor';
 
 // 是否禁用代理
 const noProxy = process.env.NO_PROXY === 'true';
@@ -79,14 +79,12 @@ const proxy = {
   },
 
   //upload
-  'POST /quant-policymanager/factorfile':(req, res) => {
-    res.send({
-        status: 'ok',
-        type,
-        currentAuthority: 'admin',
-      });
-      return;
-  },
+  // 'POST /api2/quant-policymanager/factorfile':(req, res) => {
+  //   res.send('c:/alin/test.pyc');
+  //   return;
+  // },
+  'POST /api2/quant-policymanager/factorfile':upload.filepath,
+
 
   //=====================以下是模板用例==================================
   // 支持值为 Object 和 Array

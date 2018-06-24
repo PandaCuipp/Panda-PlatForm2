@@ -3,6 +3,7 @@ import { connect } from 'dva';
 import { Row, Col, Card, Form, Input, Button, Divider, Table, Modal,Select,Upload, message,Icon,Popconfirm } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
+import reqwest from 'reqwest';
 import styles from './FactorMessage.less';
 var common = require('../../utils/common');
 
@@ -12,70 +13,168 @@ const Option = Select.Option;
 
 const CreateForm = Form.create()(props => {
 
-  this.state = {
-    fileList: [],
-    uploading: false,
-  }
+  // this.state = {
+  //   fileList: [],
+  //   uploading: false,
+  // }
 
+  
+  const { dispatch,parentThis,modalVisible,modalAction,confirmLoading,factorEntity, 
+          form, handleAdd, handleModalVisible } = props;
+  
+  const { uploading,fileList } = parentThis.state;
 
-  const handleUpload = () => {
-    const { fileList } = this.state;
+  //点击确定按钮，验证表单，先上传文件，再调用父方法，上传因子数据
+  const okHandle = () => {
+    form.validateFields((err, fieldsValue) => {
+      if (err) return;
+      
+      parentThis.setState({
+        uploading: true,
+        confirmLoading:true,
+      });
+      handleUpload((filepath)=>{
+        
+        if(filepath == ''){
+          filepath = factorEntity.filepath;
+        }
+        //handleUpload();
+        handleAdd(modalAction,{
+          ...fieldsValue,
+          authorcode:'currentUser',
+          filepath:filepath,
+          uploaddate:new Date().getTime(),
+        });
+
+        form.resetFields();  
+      });
+      
+    });
+  };
+
+  //开始上传
+  const handleUpload = (callback) => {
     const formData = new FormData();
+
+    console.log(fileList);
+    if(!fileList || fileList.length<=0){
+      console.log("未选择上传的文件");
+      callback('');
+      return;
+    }
     fileList.forEach((file) => {
-      formData.append('files[]', file);
+      formData.append('file', file);
     });
 
-    this.setState({
-      uploading: true,
-    });
+    //常规方法：不行
+    // dispatch({
+    //   type:'factor_model/upload',
+    //   payload:{
+    //       file:formData,
+    //   },
+    // }).then(()=>{
+    //   console.log(parentThis.props)
+    //   parentThis.setState({
+    //     uploading: false,
+    //   });
+    //   const{factor_model} = parentThis.props;
+    //   if(!factor_model || !factor_model.filepath){
+    //     parentThis.setState({
+    //       uploading: false,
+    //       confirmLoading:false,
+    //     });
+    //     message.error('因子文件上传失败');
+    //     return;
+    //   }
+    //   callback(factor_model.filepath);
+    // });
 
-    // You can use any AJAX library you like
+
     reqwest({
-      url: '//jsonplaceholder.typicode.com/posts/',
-      method: 'post',
+      url: '/api2/quant-policymanager/factorfile',
+      method: 'POST',
       processData: false,
       data: formData,
-      success: () => {
-        this.setState({
-          fileList: [],
-          uploading: false,
-        });
-        message.success('upload successfully.');
+      success: (data) => {
+          console.log('success data');
+          console.log(data);
+
+          let filepath = data;
+          if(!filepath){
+            parentThis.setState({
+              uploading: false,
+              confirmLoading:false,
+            });
+            message.error('因子文件上传失败');
+            return;
+          }
+
+          parentThis.setState({
+            fileList:[],
+            uploading: false,
+          });
+          callback(filepath);
       },
-      error: () => {
-        this.setState({
-          uploading: false,
-        });
-        message.error('upload failed.');
+      error: (error) => {
+        console.log('error');
+        console.log(error);
+        parentThis.setState({
+            uploading: false,
+            confirmLoading:false,
+          });
+          message.error('因子文件上传失败');
       },
     });
+
   }
 
-  const { uploading } = this.state;
-    const uploadProps = {
-      action: '//jsonplaceholder.typicode.com/posts/',
-      onRemove: (file) => {
-        this.setState(({ fileList }) => {
-          const index = fileList.indexOf(file);
-          const newFileList = fileList.slice();
-          newFileList.splice(index, 1);
-          return {
-            fileList: newFileList,
-          };
-        });
-      },
-      beforeUpload: (file) => {
-        this.setState(({ fileList }) => ({
-          fileList: [...fileList, file],
-        }));
-        return false;
-      },
-      fileList: this.state.fileList,
-    };
+  //添加上传文件
+  const addFile=(file)=>{
+    console.log('addFile:');
+    console.log(file);
+    console.log(message);
+    if(file){
+      if(fileList.filter(item=>item.name === file.name).length > 0){
+        message.warn('【'+file.name+'】文件已添加');
+      }
+      fileList.push(file);
+      let newfileList = fileList.slice();
+      console.log(fileList);
+      parentThis.setState({
+          fileList:newfileList,
+          uploading:false,
+      });
+    }
+  };
 
-  const { modalVisible,modalAction,confirmLoading,factorEntity, form, handleAdd, handleModalVisible } = props;
-  
-  //初始化弹框数据
+  //上传控件属性设置
+  const uploadProps = {
+    accept:'.pyc',
+    name:'name',
+    showUploadList:true,
+    action: '/api2/quant-policymanager/factorfile',
+    headers: {
+      enctype:"multipart/form-data",
+      method:"POST",
+    },
+    onRemove: (file) => {
+      parentThis.setState(({ fileList }) => {
+        const index = fileList.indexOf(file);
+        const newFileList = fileList.slice();
+        newFileList.splice(index, 1);
+        return {
+          fileList: newFileList,
+        };
+      });
+    },
+    beforeUpload: (file) => {
+      addFile(file);
+      return false;
+    },
+    fileList: fileList,
+
+  };
+    //初始化弹框数据
   var title='';
   var okText = '';
   if(modalAction ===1){
@@ -87,37 +186,15 @@ const CreateForm = Form.create()(props => {
     okText = '修改';
     //form.setFieldsValue(factorEntity);
   }
-
-  const okHandle = () => {
-    form.validateFields((err, fieldsValue) => {
-      if (err) return;
-      console.log('fieldsValue');
-      console.log({
-        ...fieldsValue,
-        authorcode:'currentUser',
-        uploaddate:new Date().getTime(),
-      });
-      //handleUpload();
-      
-      handleAdd(modalAction,{
-        ...fieldsValue,
-        authorcode:'currentUser',
-        uploaddate:new Date().getTime(),
-      });
-
-      form.resetFields();
-    });
-  };
   
   return (
     <Modal
       title={title}
       visible={modalVisible}
       onOk={okHandle}
-      confirmLoading={confirmLoading}
+      confirmLoading={uploading || confirmLoading}
       onCancel={() => handleModalVisible()}
       okText={okText}
-      loading={uploading}
     >
       <FormItem>
         {form.getFieldDecorator('factorid', {
@@ -168,8 +245,8 @@ const CreateForm = Form.create()(props => {
         })(<TextArea placeholder="因子说明内容" />)}
       </FormItem>
 
-      <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="因子说明">
-          <Upload {...uploadProps}>
+      <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="因子文件上传">
+          <Upload {...uploadProps} >
           <Button>
             <Icon type="upload" />选择文件
           </Button>
@@ -183,6 +260,7 @@ const CreateForm = Form.create()(props => {
 
     </Modal>
   );
+
 });
 
 
@@ -202,6 +280,8 @@ export default class FactorMessage extends PureComponent {
     factorEntity:{},  //修改的factor实体
     modalVisible: false, //增加、修改框 是否显示
     confirmLoading: false,  //是否正在提交数据库
+    fileList: [], //上传文件
+    uploading: false, //是否正在上传文件
   };
 
   componentDidMount() {
@@ -330,10 +410,10 @@ export default class FactorMessage extends PureComponent {
   handleAdd = (action,fields) => {
     console.log("handleAdd:");
     console.log(fields);
-    //正在上传新增或修改的数据
-    this.setState({
-        confirmLoading: true,
-      });
+    
+    // this.setState({
+    //     confirmLoading: false,
+    //   });
 
     if(action === 1){ //新增
         this.props.dispatch({
@@ -467,7 +547,7 @@ fake = (value,type) => {
 
 
   render() {
-    console.log("render");
+    
     const {personDataList,departmentDataList} = this.state;
     const { modalVisible, confirmLoading, modalAction,factorEntity } = this.state;
 
@@ -559,6 +639,8 @@ fake = (value,type) => {
     const parentMethods = {
       handleAdd: this.handleAdd,
       handleModalVisible: this.handleModalVisible,
+      parentThis:this,
+      dispatch:this.props.dispatch,
     };
 
     return (

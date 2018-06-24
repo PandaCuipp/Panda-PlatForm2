@@ -1,4 +1,4 @@
-import { getAllFactorInfoList,factorInfoAdd,factorInfoUpdate,factorInfoDelete } from '../services/api';
+import { getAllFactorInfoList,factorInfoAdd,factorInfoUpdate,factorInfoDelete,factorInfoUpload } from '../services/api';
 // 是否禁用代理
 const noProxy = process.env.NO_PROXY === 'true';
 export default {
@@ -7,6 +7,7 @@ export default {
   state: {
     factorData:[],
     currentFactorInfo:{},
+    filepath:'',
   },
 
   effects: {
@@ -57,6 +58,20 @@ export default {
         },
       });
     },
+    //上传
+    *upload({payload},{call,put}){
+      var response = yield call(factorInfoUpload,payload);
+      console.log("upload factor file:");
+      console.log(payload);
+      console.log(response);
+      yield put({
+        type:'save',
+        payload:{
+          filepath:response,
+          //factorData:state.factorData.filter(item => item.factorid !== payload.id),
+        },
+      });
+    },
     // effects end
   },
 
@@ -77,6 +92,7 @@ export default {
       return {
         factorData:[],
         currentFactorInfo:{},
+        filepath:'',
       };
     },
   },

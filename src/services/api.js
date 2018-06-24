@@ -88,6 +88,22 @@ export async function factorInfoDelete(id){
   });
 }
 
+//factorInfoUpload
+export async function factorInfoUpload(params){
+  if(!params){
+    console.error("add factor params undefined");
+    return {};
+  }
+  return request('/api2/quant-policymanager/factorfile', {
+    method: 'POST',
+    body: {
+      ...params,
+      //method: 'post',
+    },
+  });
+
+}
+
 
 //=====================以下是模板用例=========================
 

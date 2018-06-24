@@ -74,6 +74,9 @@ const factorData=[{
     },
 ];
 
+const upload = {filepath:'c:/alin/test.pyc'};
+
 export default {
   factorData,
+  upload,
 };
