@@ -359,27 +359,42 @@ export default class FactorMessage extends PureComponent {
     });
   }
 
-  handleOk = () => {
-    if(!this.state.uploading){
-      //上传数据
-      this.setState({
+  // handleOk = () => {
+  //   if(!this.state.uploading){
+  //     //上传数据
+  //     this.setState({
         
-        confirmLoading: true,
-      });
-      setTimeout(() => {
-        this.setState({
-          modalVisible: false,
-          confirmLoading: false,
-        });
-      }, 2000);
-    }
-  }
+  //       confirmLoading: true,
+  //     });
+  //     setTimeout(() => {
+  //       this.setState({
+  //         modalVisible: false,
+  //         confirmLoading: false,
+  //       });
+  //     }, 2000);
+  //   }
+  // }
   // handleCancel = () => {
   //   console.log('Clicked cancel button');
   //   this.setState({
   //     modalVisible: false,
   //   });
   // };
+
+  handleDelete=(id)=>{
+    const {dispatch} = this.props;
+    dispatch({
+        type: 'factor_model/delete',
+        payload: { id },}).then(()=>{
+          message.success('删除成功');
+          // this.setState({
+          //   confirmLoading:false,
+          //   modalVisible: false,
+          // });
+          //新增成功，重新请求接口
+          //this.loadDataList();
+        });
+  }
 
   render() {
     console.log("render");
@@ -418,7 +433,7 @@ export default class FactorMessage extends PureComponent {
           <Fragment>
             <a onClick={()=>{this.showModal(2,record)}}>修改</a>
             <Divider type="vertical" />
-            <a href="">删除</a>
+            <a onClick={()=>{this.handleDelete(record.factorid)}}>删除</a>
             <Divider type="vertical" />
             <a href="">提交到部门</a>
           </Fragment>
@@ -461,7 +476,7 @@ export default class FactorMessage extends PureComponent {
           <Fragment>
             <a onClick={()=>{this.showModal(2,record)}}>修改</a>
             <Divider type="vertical" />
-            <a href="">删除</a>
+            <a onClick={()=>{this.handleDelete(record.factorid)}}>删除</a>
           </Fragment>
         ),
       },

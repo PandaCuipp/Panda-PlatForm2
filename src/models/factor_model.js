@@ -63,14 +63,14 @@ export default {
             uploaddate:1529498409888,
           };
       }
-      console.log("delte factorInfo:");
+      console.log("delete factorInfo:");
       console.log(payload);
       console.log(response);
       yield put({
         type:'save',
         payload:{
           currentFactorInfo:response,
-          factorData:state.factorData.filter(item => item.factorid !== payload.factorid),
+          //factorData:state.factorData.filter(item => item.factorid !== payload.id),
         },
       });
     },
@@ -83,6 +83,12 @@ export default {
         ...state,
         ...payload,
       };
+    },
+    saveDelete(state, { payload }) {
+      console.log("saveDelete");
+      console.log(state);
+      console.log(payload);
+      return state.factorData.filter(item => item.factorid !== payload.id);
     },
     clear() {
       return {
