@@ -401,6 +401,7 @@ export default class FactorMessage extends PureComponent {
       modalAction:flag,
       factorEntity:entity,
       modalVisible: true,
+      confirmLoading:false,
     });
   }
 
