@@ -386,6 +386,23 @@ export default class FactorMessage extends PureComponent {
         });
   }
 
+//提交到部门
+  submitToDepartment=(factorInfo)=>{
+    const {dispatch} = this.props;
+    var info = factorInfo;
+    info.scope = 'department';
+      dispatch({
+          type: 'factor_model/update',
+          payload: { ...info },}).then(()=>{
+            const {currentFactorInfo} = this.props.factor_model;
+            if(currentFactorInfo && currentFactorInfo.factorid !== ""){
+              message.success('提交成功');
+            }else{
+              message.success('提交失败');
+            }
+          });
+  }
+
   render() {
     console.log("render");
     const {personDataList,departmentDataList} = this.state;
@@ -427,7 +444,9 @@ export default class FactorMessage extends PureComponent {
               <a>删除</a>
             </Popconfirm>
             <Divider type="vertical" />
-            <a href="">提交到部门</a>
+            <Popconfirm title="确定提交到部门?" onConfirm={()=>{this.submitToDepartment(record)}}>
+              <a>提交到部门</a>
+            </Popconfirm>
           </Fragment>
         ),
       },
