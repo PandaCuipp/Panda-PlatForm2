@@ -186,6 +186,7 @@ const CreateForm = Form.create()(props => {
 });
 
 
+let timeout;
 
 @connect(({ factor_model,rule, loading }) => ({
   factor_model,
@@ -261,21 +262,25 @@ export default class FactorMessage extends PureComponent {
   };
 
 
-  renderForm() {
-    const { getFieldDecorator } = this.props.form;
+  renderForm(fetch) {
+    //const { getFieldDecorator } = this.props.form;
 
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem label="个人因子库">
-              {getFieldDecorator('no')(<Input placeholder="模糊搜索" />)}
+              <Select
+                mode="combobox"
+                placeholder='模糊搜索'
+                defaultActiveFirstOption={false}
+                showArrow={false}
+                filterOption={false}
+                onChange={(value)=>fetch(value,1)}
+              >
+              </Select>
             </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <Button type="primary" htmlType="submit">
-              搜索
-            </Button>
+            
           </Col>
           <Col md={8} sm={24}>
             <Button type="primary" onClick={()=>{this.showModal(1,{})}}>新增因子</Button>
@@ -285,20 +290,24 @@ export default class FactorMessage extends PureComponent {
     );
   }
 
-  renderForms() {
+  renderForms(fetch) {
     const { getFieldDecorator } = this.props.form;
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem label="部门因子库">
-              {getFieldDecorator('no')(<Input placeholder="模糊搜索" />)}
+              <Select
+                mode="combobox"
+                placeholder='模糊搜索'
+                defaultActiveFirstOption={false}
+                showArrow={false}
+                filterOption={false}
+                onChange={(value)=>fetch(value,2)}
+              >
+              </Select>
             </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
-            <Button type="primary" htmlType="submit">
-              搜索
-            </Button>
+            
           </Col>
         </Row>
       </Form>
@@ -386,7 +395,7 @@ export default class FactorMessage extends PureComponent {
         });
   }
 
-//提交到部门
+    //提交到部门
   submitToDepartment=(factorInfo)=>{
     const {dispatch} = this.props;
     var info = factorInfo;
@@ -403,12 +412,64 @@ export default class FactorMessage extends PureComponent {
           });
   }
 
+  //模糊匹配
+  fetchPerson=(key)=>{
+    const {personDataList,departmentDataList} = this.state;
+
+    personDataList.filter(item=>item)
+  }
+
+//==============
+  //type:1-个人，2-部门
+  fetch =(value,type) => {
+    console.log('fetch:'+value);
+    
+    if (timeout) {
+      clearTimeout(timeout);
+      timeout = null;
+    }
+    //currentValue = value;
+  timeout = setTimeout(()=>{this.fake(value,type)}, 500);
+}
+
+fake = (value,type) => {
+  const {dispatch} = this.props;
+      dispatch({
+          type: 'factor_model/fetch',
+        }).then(()=>{
+            const {factorData}=this.props.factor_model;
+            console.log("this.props");
+            console.log(this.props);
+            if(!factorData){
+              return;
+            }
+            if(type === 1){
+              var personDataList = factorData.filter(item => item.scope === "person");
+              personDataList = personDataList.filter(item => (item.factorname && item.factorname.indexOf(value)>=0) 
+                || (item.factorcode && item.factorcode.indexOf(value)>=0));
+              //const departmentDataList = factorData.filter(item => item.scope === "department");
+              this.setState({
+                personDataList:personDataList,
+              });
+            }else if(type === 2){
+              var departmentDataList = factorData.filter(item => item.scope === "department");
+              departmentDataList = departmentDataList.filter(item => (item.factorname && item.factorname.indexOf(value)>=0) 
+                || (item.factorcode && item.factorcode.indexOf(value)>=0));
+              //const departmentDataList = factorData.filter(item => item.scope === "department");
+              this.setState({
+                departmentDataList:departmentDataList,
+              });
+            }
+            
+          });
+    }
+//==============
+
+
   render() {
     console.log("render");
     const {personDataList,departmentDataList} = this.state;
-
     const { modalVisible, confirmLoading, modalAction,factorEntity } = this.state;
-
 
     const columns = [
       {
@@ -504,14 +565,16 @@ export default class FactorMessage extends PureComponent {
       <PageHeaderLayout title="单因子信息管理">
         <Card bordered={true}>
           <div className={styles.tableList}>
-            <div className={styles.tableListForm}>{this.renderForm()}</div>
+            <div className={styles.tableListForm}>
+                {this.renderForm(this.fetch)}
+            </div>
             <Table rowKey={record => record.factorid} dataSource={personDataList} columns={columns} />
           </div>
         </Card>
 
         <Card bordered={true} style={{ marginTop: 30 }}>
           <div className={styles.tableList}>
-            <div className={styles.tableListForm}>{this.renderForms()}</div>
+            <div className={styles.tableListForm}>{this.renderForms(this.fetch)}</div>
             <Table rowKey={record => record.factorid} dataSource={departmentDataList} columns={columnss} />
           </div>
         </Card>
