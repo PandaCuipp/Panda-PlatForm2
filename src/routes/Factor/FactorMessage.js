@@ -260,50 +260,6 @@ export default class FactorMessage extends PureComponent {
     });
   };
 
-  //action:1-新增，2修改；
-  //fields:弹出框字段
-  handleAdd = (action,fields) => {
-    console.log("handleAdd:");
-    console.log(fields);
-
-    //正在上传新增或修改的数据
-    this.setState({
-        confirmLoading: true,
-      });
-
-    if(action === 1){ //新增
-        this.props.dispatch({
-        type: 'factor_model/add',
-        payload: {
-          ...fields
-        },}).then(()=>{
-          message.success('新增成功');
-          this.setState({
-            confirmLoading:false,
-            modalVisible: false,
-          });
-          //新增成功，重新请求接口
-          this.loadDataList();
-        });
-    }else if(action === 2){ //修改
-        this.props.dispatch({
-        type: 'factor_model/update',
-        payload: {
-          ...fields
-        },}).then(()=>{
-          message.success('修改成功');
-          this.setState({
-            confirmLoading:false,
-            modalVisible: false,
-          });
-          //新增成功，重新请求接口
-          this.loadDataList();
-        });
-    }
-
-    
-  };
-
 
   renderForm() {
     const { getFieldDecorator } = this.props.form;
@@ -359,40 +315,74 @@ export default class FactorMessage extends PureComponent {
     });
   }
 
-  // handleOk = () => {
-  //   if(!this.state.uploading){
-  //     //上传数据
-  //     this.setState({
-        
-  //       confirmLoading: true,
-  //     });
-  //     setTimeout(() => {
-  //       this.setState({
-  //         modalVisible: false,
-  //         confirmLoading: false,
-  //       });
-  //     }, 2000);
-  //   }
-  // }
-  // handleCancel = () => {
-  //   console.log('Clicked cancel button');
-  //   this.setState({
-  //     modalVisible: false,
-  //   });
-  // };
+  
+  //action:1-新增，2修改；
+  //fields:弹出框字段
+  handleAdd = (action,fields) => {
+    console.log("handleAdd:");
+    console.log(fields);
+    //正在上传新增或修改的数据
+    this.setState({
+        confirmLoading: true,
+      });
+
+    if(action === 1){ //新增
+        this.props.dispatch({
+        type: 'factor_model/add',
+        payload: {
+          ...fields
+        },}).then(()=>{
+          const {currentFactorInfo} = this.props.factor_model;
+          if(currentFactorInfo && currentFactorInfo.factorid !== ""){
+            message.success('新增成功');
+            this.setState({
+              confirmLoading:false,
+              modalVisible: false,
+            });
+            //新增成功，重新请求接口
+            this.loadDataList();
+          }else{
+            message.success('新增失败');
+          }
+
+        });
+    }else if(action === 2){ //修改
+        this.props.dispatch({
+        type: 'factor_model/update',
+        payload: {
+          ...fields
+        },}).then(()=>{
+          const {currentFactorInfo} = this.props.factor_model;
+          if(currentFactorInfo && currentFactorInfo.factorid !== ""){
+            message.success('修改成功');
+            this.setState({
+              confirmLoading:false,
+              modalVisible: false,
+            });
+            //新增成功，重新请求接口
+            this.loadDataList();
+          }
+          else{
+            message.success('修改失败');
+          }
+        });
+    }
+
+    
+  };
+
 
   handleDelete=(id)=>{
     const {dispatch} = this.props;
     dispatch({
         type: 'factor_model/delete',
         payload: { id },}).then(()=>{
-          message.success('删除成功');
-          // this.setState({
-          //   confirmLoading:false,
-          //   modalVisible: false,
-          // });
-          //新增成功，重新请求接口
-          //this.loadDataList();
+          const {currentFactorInfo} = this.props.factor_model;
+          if(currentFactorInfo && currentFactorInfo.factorid !== ""){
+            message.success('删除成功');
+          }else{
+            message.success('删除失败');
+          }
         });
   }
 
