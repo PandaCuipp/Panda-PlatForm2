@@ -20,7 +20,7 @@ const server2 = 'https://quant-dev.phfund.com.cn';
 const proxy = {
   //=============================正式项目======================================== 
   
-  'GET /api2/quant-policymanager/strategy-simple': getFakeBrinson.strategyInfo,
+  'GET /api2/quant-policymanager/strategy-simple/infoid': getFakeBrinson.strategyInfo,
 
   //来源于service/api.js
   'GET /api1/performance/brinson': getFakeBrinson.brinsonData,

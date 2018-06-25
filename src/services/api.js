@@ -8,7 +8,12 @@ const noProxy = process.env.NO_PROXY === 'true';
 
 //获取策略详情
 export async function getStrategyInfo(params) {
-  return request(`/api2/quant-policymanager/strategy-simple?${stringify(params)}`);
+  //strategy_id
+  let id = params.strategy_id;
+  if(!noProxy){
+    id='infoid'
+  }
+  return request('/api2/quant-policymanager/strategy-simple/' + id);
 }
 
 //获取Brinson归因明细

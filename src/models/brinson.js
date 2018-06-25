@@ -43,7 +43,7 @@ export default {
       });
     },
     //获取策略
-    *getStrategyInfo(payload, { call, put }) {
+    *getStrategyInfo({payload}, { call, put }) {
       const response = yield call(getStrategyInfo, payload);
       yield put({
         type: 'save',
