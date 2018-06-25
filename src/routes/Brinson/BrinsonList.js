@@ -73,7 +73,9 @@ export default class BrinsonList extends Component {
         const configData = []; // 行业配置
         const stockcrossData = []; //选股+交叉
         //const dataData = brinsonData.data; //交叉数据
-
+        if(!brinsonData.data){
+          return;
+        }
         for (let i = 0; i < brinsonData.data.length; i++) {
           for (let j = 0; j < brinsonData.columns.length; j++) {
             if (brinsonData.columns[j] == '超额贡献') {

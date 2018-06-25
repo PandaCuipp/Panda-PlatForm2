@@ -11,7 +11,8 @@ import { getFakeBrinson } from './mock/brinson';
 import { factorData,upload } from './mock/factor';
 
 // 是否禁用代理
-const noProxy = process.env.NO_PROXY === 'true';
+//const noProxy = process.env.NO_PROXY === 'true';
+const noProxy = true;
 
 const server1 = 'http://192.168.250.12:30000';
 const server2 = 'https://quant-dev.phfund.com.cn';
@@ -20,7 +21,7 @@ const server2 = 'https://quant-dev.phfund.com.cn';
 const proxy = {
   //=============================正式项目======================================== 
   
-  'GET /api2/quant-policymanager/strategy-simple/infoid': getFakeBrinson.strategyInfo,
+  'GET /api2/quant-policymanager/strategy-simple': getFakeBrinson.strategyInfo,
 
   //来源于service/api.js
   'GET /api1/performance/brinson': getFakeBrinson.brinsonData,
@@ -49,7 +50,7 @@ const proxy = {
   },
 
   //update
-  'PUT /api2/quant-policymanager/factor/updateid':(req, res) => {
+  'PUT /api2/quant-policymanager/factor':(req, res) => {
     res.send({
         factorid:'ad83ieka0d321d9vdq3d03ld31ecw040',
         authorcode:'Panda',
@@ -63,7 +64,7 @@ const proxy = {
       });
       return;
   },
-  'DELETE /api2/quant-policymanager/factor/deleteid':(req, res) => {
+  'DELETE /api2/quant-policymanager/factor':(req, res) => {
     res.send({
         factorid:'ad83ieka0d321d9vdq3d03ld31ecw040',
         authorcode:'Panda',

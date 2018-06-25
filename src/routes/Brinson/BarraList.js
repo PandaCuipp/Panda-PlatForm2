@@ -68,7 +68,10 @@ export default class BarraList extends Component {
         var index = BarraDetailData.index;
         var columns = BarraDetailData.columns; //行数据
         var dataArray = BarraDetailData.data;
-
+        if(!dataArray){
+          return;
+        }
+        
         for (var i = 0; i < dataArray.length; i++) {
           for (var j = 0; j < columns.length; j++) {
             if (columns[j] == '超额贡献') {

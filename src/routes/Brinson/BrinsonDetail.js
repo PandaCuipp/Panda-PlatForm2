@@ -65,7 +65,9 @@ export default class BrinsonDetail extends Component {
         var indexData = brinsonData.index;
         var columnsData = brinsonData.columns; //行数据
         var dataData = brinsonData.data;
-
+        if(!columnsData || !indexData){
+          return;
+        }
         //表头
         const columns = [
           {

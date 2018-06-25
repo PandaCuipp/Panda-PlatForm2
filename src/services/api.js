@@ -2,18 +2,19 @@ import { stringify } from 'qs';
 import request from '../utils/request';
 
 // 是否禁用代理
-const noProxy = process.env.NO_PROXY === 'true';
+//const noProxy = process.env.NO_PROXY === 'true';
+const noProxy = true;
 
 //========================请求Brinson模块数据=============================
 
 //获取策略详情
 export async function getStrategyInfo(params) {
   //strategy_id
-  let id = params.strategy_id;
+  let id = '/'+params.strategy_id;
   if(!noProxy){
-    id='infoid'
+    id='';
   }
-  return request('/api2/quant-policymanager/strategy-simple/' + id);
+  return request('/api2/quant-policymanager/strategy-simple' + id);
 }
 
 //获取Brinson归因明细
@@ -61,11 +62,11 @@ export async function factorInfoUpdate(params){
     console.error("update factorid is undefined:"+ params);
     return {};
   }
-  var id = params.factorid;
+  var id = '/'+ params.factorid;
   if(!noProxy){
-    id='updateid'
+    id='';
   }
-  return request('/api2/quant-policymanager/factor/'+ id, {
+  return request('/api2/quant-policymanager/factor'+ id, {
     method: 'PUT',
     body: {
       ...params,
@@ -80,11 +81,11 @@ export async function factorInfoDelete(id){
     console.error("delete factorid is undefined:"+ id);
     return {};
   }
-  var deleteid = id.id;
+  var deleteid = '/' + id.id;
   if(!noProxy){
-    deleteid='deleteid'
+    deleteid='';
   }
-  return request('/api2/quant-policymanager/factor/'+ deleteid, {
+  return request('/api2/quant-policymanager/factor'+ deleteid, {
     method: 'DELETE',
     body: {
       id,
