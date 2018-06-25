@@ -52,7 +52,7 @@ export default class BarraAnalysis extends Component {
 		selectedValue: trade_date,
 	});
 
-	this.refrushData(trade_date);
+	this.refrushData(strategy_id,index_code,trade_date);
 
     this.props
       .dispatch({
@@ -75,9 +75,8 @@ export default class BarraAnalysis extends Component {
 		// });
 	}
 
-	refrushData = (trade_date)=>{
-		console.log("refrushData:"+trade_date);
-		const {strategy_id, index_code} = this.state;
+	refrushData = (strategy_id,index_code,trade_date)=>{
+		
 		this.props.dispatch({
 			type: 'brinson/getBarraAnalysisData', //获取模拟的data数据
 			payload: { strategy_id, index_code, trade_date },
@@ -137,7 +136,8 @@ export default class BarraAnalysis extends Component {
 			value: date,
 			selectedValue: dateString,
 		});
-		this.refrushData(dateString);
+		const {strategy_id, index_code} = this.state;
+		this.refrushData(strategy_id, index_code,dateString);
 	}
 	render() {
 
