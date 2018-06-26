@@ -152,7 +152,8 @@ const CreateForm = Form.create()(props => {
     accept:'.pyc',
     name:'name',
     showUploadList:true,
-    action: '/api2/quant-policymanager/factorfile',
+    //action: '/api2/quant-policymanager/factorfile',
+    action:'https://quant-dev.phfund.com.cn/quant-policymanager/factorfile',
     headers: {
       enctype:"multipart/form-data",
       method:"POST",
