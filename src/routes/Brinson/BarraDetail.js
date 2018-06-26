@@ -38,7 +38,9 @@ export default class BarraDetail extends Component {
     const index_code = common.getParamFromURLOrCookie('index_code', true);
     const begin_date = common.getParamFromURLOrCookie('begin_date', true);
     const end_date = common.getParamFromURLOrCookie('end_date', true);
-
+    if(!strategy_id){
+      return;
+    }
     this.setState({
       begin_date: begin_date,
       end_date: end_date,
@@ -127,6 +129,10 @@ export default class BarraDetail extends Component {
 			tableData,strategyInfo
 		} = this.state;
 
+		let strategy_name = '';
+	    if(strategyInfo != undefined){
+	      strategy_name = strategyInfo.strategy_name;
+	    }
 		return(
 			<Fragment>
         <NavigationBar currentKey={this.state.currentTabKey} />
@@ -134,7 +140,7 @@ export default class BarraDetail extends Component {
         <Card loading={loading} bordered={true} style={{ textAlign:'center' }}>
 	        <Row>
 	          <Col md={12} sm={24}>
-	            <p>策略：<span>{strategyInfo.strategy_name}</span></p>
+	            <p>策略：<span>{strategy_name}</span></p>
 	          </Col>
 	          <Col md={12} sm={24}>
 	            <p>日期：<span>{this.state.begin_date}~{this.state.end_date}</span></p>

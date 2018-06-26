@@ -36,11 +36,15 @@ export default class BarraAnalysis extends Component {
 	};
 	//生命周期 - 初始化
 	componentDidMount() {
-		console.log("componentDidMount");
+
 	const strategy_id = common.getParamFromURLOrCookie('strategy_id', true);
     const index_code = common.getParamFromURLOrCookie('index_code', true);
     const begin_date = common.getParamFromURLOrCookie('begin_date', true);
     var trade_date = common.getParamFromURLOrCookie('trade_date', true);
+    if(!strategy_id){
+      return;
+    }
+
     if(trade_date || trade_date === ""){
     	trade_date = begin_date;
     }
@@ -152,6 +156,12 @@ export default class BarraAnalysis extends Component {
 			selectedValue,
 			value
 		} = this.state;
+
+	    let strategy_name = '';
+	    if(strategyInfo != undefined){
+	      strategy_name = strategyInfo.strategy_name;
+	    }
+
 		const dateFormat = 'YYYYMMDD';
 		return(
 			<Fragment>
@@ -159,7 +169,7 @@ export default class BarraAnalysis extends Component {
         <Card loading={loading} bordered={true} style={{ textAlign:'center' }}>
 	        <Row>
 	          <Col md={8} sm={24}>
-	            <p>策略：<span>{strategyInfo.strategy_name}</span></p>
+	            <p>策略：<span>{strategy_name}</span></p>
 	          </Col>
 	          <Col md={8} sm={24}>
 	            日期：<DatePicker allowClear={false} value={value} format={dateFormat} onChange={this.onChange } />

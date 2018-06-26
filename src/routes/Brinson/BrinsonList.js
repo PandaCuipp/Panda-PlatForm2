@@ -33,13 +33,14 @@ export default class BrinsonList extends Component {
   };
 
   componentDidMount() {
-    console.log('componentDidMount');
 
     const strategy_id = common.getParamFromURLOrCookie('strategy_id', true);
     const index_code = common.getParamFromURLOrCookie('index_code', true);
     const begin_date = common.getParamFromURLOrCookie('begin_date', true);
     const end_date = common.getParamFromURLOrCookie('end_date', true);
-
+    if(!strategy_id){
+      return;
+    }
     this.setState({
       begin_date: begin_date,
       end_date: end_date,
@@ -338,11 +339,15 @@ export default class BrinsonList extends Component {
   };
 
   render() {
-    console.log('render');
-
+    console.log(this.state);
     const { brinson, loading } = this.props;
     const { columns, tableData, columns2, tableData2, strategyInfo } = this.state;
-
+    console.log('strategyInfo');
+    console.log(strategyInfo);
+    let strName = '';
+    if(strategyInfo != undefined){
+      strName = strategyInfo.strategy_name;
+    }
     return (
       <Fragment>
         <NavigationBar currentKey={this.state.currentTabKey} />
@@ -351,7 +356,7 @@ export default class BrinsonList extends Component {
           <Row>
             <Col md={12} sm={24}>
               <p>
-                策略：<span>{strategyInfo.strategy_name}</span>
+                策略：<span>{strName}</span>
               </p>
             </Col>
             <Col md={12} sm={24}>
