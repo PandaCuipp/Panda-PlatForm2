@@ -4,8 +4,8 @@
  * variable：要获取的字段名称
  */
 export function getQueryVariable(variable) {
-    //var query = window.location.href;
-    var query = "http://192.168.250.12:30000/performance/brinson?strategy_id=B0000000000000000000000000002314&index_code=000905&begin_date=20180228&end_date=20180525";
+    var query = window.location.href;
+    //var query = "http://192.168.250.12:30000/performance/brinson?strategy_id=B0000000000000000000000000002314&index_code=000905&begin_date=20180228&end_date=20180525";
     if(query.indexOf("?") < 0){
         return "";
     }
