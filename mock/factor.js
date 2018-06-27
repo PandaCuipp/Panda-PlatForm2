@@ -1,78 +1,85 @@
 
 const factorData=[{
-	"authorcode": "Alin",
-	"describe": "因子描述1111",
-	"factorcode": "factor001",
-	"factorid": "40287d08641cffe701641d0017630003",
-	"factorname": "因子名称1",
-	"filepath": "c:/test.pyc",
-	"scope": "person",
-	"type": "marketvalue",
-	"uploaddate": 1529498409350
+    "factorid": "40287d0864358689016435907a7c0000",
+    "authorcode": "sunxiaobing",
+    "type": "maketvalue",
+    "scope": "person",
+    "factorname": "PE因子",
+    "factorcode": "PE",
+    "describe": "市场股票的PE值",
+    "filepath": "/home/file/pe.pyc",
+    "uploaddate": "2018-06-25T06:10:14.045+0000"
 }, {
-        "factorid": "40287d08641cffe701641d0017630002",
-        "authorcode": null,
-        "type": "1",
-        "scope": "person",
-        "factorname": "factorname2",
-        "factorcode": "factorone",
-        "describe": null,
-        "filepath": null,
-        "uploaddate": 1529498409350
-    },
-    {
-        "factorid": "40287d08641cffe701641d05b5ba0001",
-        "authorcode": null,
-        "type": "1",
-        "scope": "person",
-        "factorname": null,
-        "factorcode": "factorone",
-        "describe": "自定义因子",
-        "filepath": null,
-        "uploaddate": 1529495270840
-    },
-    {
-	"authorcode": "Alin",
-	"describe": "因子描述1111",
-	"factorcode": "factor001",
-	"factorid": "40287d08641cffe701641d0017630004",
-	"factorname": "因子名称1",
-	"filepath": "c:/test.pyc",
-	"scope": "department",
-	"type": "marketvalue",
-	"uploaddate": 1529498409350
+    "factorid": "8a69cae764357a7001643746bb610002",
+    "authorcode": "admin",
+    "type": "marketvalue",
+    "scope": "department",
+    "factorname": "test2",
+    "factorcode": "test2",
+    "describe": "test2",
+    "filepath": null,
+    "uploaddate": "2018-06-27T07:30:47.910+0000"
 }, {
-        "factorid": "40287d08641cffe701641d0017630005",
-        "authorcode": null,
-        "type": "1",
-        "scope": "person",
-        "factorname": "factorname2",
-        "factorcode": "factorone",
-        "describe": null,
-        "filepath": null,
-        "uploaddate": 1529498409350
-    },{
-	"authorcode": "Alin",
-	"describe": "因子描述1111",
-	"factorcode": "factor001",
-	"factorid": "40287d08641cffe701641d0017630006",
-	"factorname": "因子名称1",
-	"filepath": "c:/test.pyc",
-	"scope": "department",
-	"type": "marketvalue",
-	"uploaddate": 1529498409350
+    "factorid": "8a69cae764357a700164402612d60007",
+    "authorcode": "sunxiaobing",
+    "type": "maketvalue",
+    "scope": "person",
+    "factorname": "PE因子",
+    "factorcode": "PE",
+    "describe": "市场股票的PE值",
+    "filepath": "/home/file/pe.pyc",
+    "uploaddate": "2018-06-27T07:29:54.388+0000"
 }, {
-        "factorid": "40287d08641cffe701641d0017630007",
-        "authorcode": null,
-        "type": "1",
-        "scope": "person",
-        "factorname": "factorname2",
-        "factorcode": "factorone",
-        "describe": null,
-        "filepath": null,
-        "uploaddate": 1529498409350
-    },
-];
+    "factorid": "8a69cae764357a700164402c8ef30009",
+    "authorcode": "admin",
+    "type": "marketvalue",
+    "scope": "person",
+    "factorname": "test1",
+    "factorcode": "test1",
+    "describe": "test1",
+    "filepath": null,
+    "uploaddate": "2018-06-27T07:36:59.377+0000"
+}, {
+    "factorid": "test",
+    "authorcode": null,
+    "type": null,
+    "scope": null,
+    "factorname": "NLSIZE",
+    "factorcode": null,
+    "describe": null,
+    "filepath": "cal_nlsize.py",
+    "uploaddate": null
+}, {
+    "factorid": "40287d0864358689016435907a730000",
+    "authorcode": "admin",
+    "type": "maketvalue",
+    "scope": "department",
+    "factorname": "PE因子",
+    "factorcode": "PE_code",
+    "describe": "修改test",
+    "filepath": "/home/file/pe.pyc",
+    "uploaddate": "2018-06-27T06:14:36.273+0000"
+}, {
+    "factorid": "test2",
+    "authorcode": null,
+    "type": null,
+    "scope": null,
+    "factorname": "TEST_VALUE",
+    "factorcode": null,
+    "describe": null,
+    "filepath": "cal_factor_test.py",
+    "uploaddate": null
+}, {
+    "factorid": "test3",
+    "authorcode": null,
+    "type": null,
+    "scope": null,
+    "factorname": "TEST_VALUE2",
+    "factorcode": null,
+    "describe": null,
+    "filepath": "cal_factor_test2.py",
+    "uploaddate": null
+}];
 
 const upload = {filepath:'c:/alin/test.pyc'};
 

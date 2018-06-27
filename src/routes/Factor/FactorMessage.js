@@ -270,8 +270,15 @@ export default class FactorMessage extends PureComponent {
         return;
       }
       //dataSource
-      const personDataList = factorData.filter(item => item.scope === "person");
-      const departmentDataList = factorData.filter(item => item.scope === "department");
+      let departmentDataList = [];
+      let personDataList = [];
+      for(let fa of factorData){
+        if(fa.scope === 'department'){
+          departmentDataList.push(fa);
+        }else{
+          personDataList.push(fa);
+        }
+      }
       this.setState({
         personDataList:personDataList,
         departmentDataList:departmentDataList,
@@ -284,9 +291,9 @@ export default class FactorMessage extends PureComponent {
   updateDataList=(p_d,action,entity)=>{
     let rawDataList;
     if(p_d == 1){
-      rawDataList = this.state.personDataList;
+      rawDataList = this.state.personDataList.slice();
     }else if(p_d == 2){
-      rawDataList = this.state.departmentDataList;
+      rawDataList = this.state.departmentDataList.slice();
     }else {
       return;
     }
@@ -313,16 +320,18 @@ export default class FactorMessage extends PureComponent {
 
     if(p_d == 1){
       this.setState({
-        personDataList:personData.slice(),
+        personDataList:personData,
         //departmentDataList:departmentDataList,
       });
     }else if(p_d == 2){
       this.setState({
-        departmentDataList:personData.slice(),
+        departmentDataList:personData,
         //departmentDataList:departmentDataList,
       });
     }
-    
+    console("updateDataList"+p_d+","+action);
+    console.log(entity);
+    this.loadDataList();
   }
 
   handleSearch = e => {
