@@ -33,18 +33,22 @@ export default class BarraAnalysis extends Component {
 		tableData:[],
 		value: moment(new Date().Format("yyyyMMdd")),
 		selectedValue: new Date().Format("yyyyMMdd"),
+		index_code:'000300',
 	};
 	//生命周期 - 初始化
 	componentDidMount() {
 
 	const strategy_id = common.getParamFromURLOrCookie('stg_id', true);
-    const index_code = common.getParamFromURLOrCookie('init_scale', true);
+    let index_code = common.getParamFromURLOrCookie('index_code', true);
     const begin_date = common.getParamFromURLOrCookie('startdate', true);
     const end_date = common.getParamFromURLOrCookie('enddate', true);
     const usercode = common.getParamFromURLOrCookie('usercode', true);
     var trade_date = common.getParamFromURLOrCookie('trade_date', true);
     if(!strategy_id){
       return;
+    }
+    if(index_code == ''){
+      index_code = this.state.index_code;
     }
 
     if(trade_date || trade_date === ""){

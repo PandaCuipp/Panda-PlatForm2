@@ -17,6 +17,7 @@ var $ = require('jquery');
 //import exportExcel from '../../utils/exportExcel';
 var exportExcel = require('../../utils/exportExcel');
 var common = require('../../utils/common');
+const Option = Select.Option;
 
 @connect(({ brinson, loading }) => ({
   brinson,
@@ -352,6 +353,8 @@ export default class BrinsonList extends Component {
     this.setState({
       index_code:value,
     });
+
+    common.setCookie("index_code",value,24*60);
   }
 
   render() {

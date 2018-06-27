@@ -27,17 +27,21 @@ export default class BrinsonDetail extends Component {
     columns: [],
     tableData: [],
     strategyInfo: {},
+    index_code:'000300',
   };
 
   componentDidMount() {
 
     const strategy_id = common.getParamFromURLOrCookie('stg_id', true);
-    const index_code = common.getParamFromURLOrCookie('init_scale', true);
+    let index_code = common.getParamFromURLOrCookie('index_code', true);
     const begin_date = common.getParamFromURLOrCookie('startdate', true);
     const end_date = common.getParamFromURLOrCookie('enddate', true);
     const usercode = common.getParamFromURLOrCookie('usercode', true);
     if(!strategy_id){
       return;
+    }
+    if(index_code == ''){
+      index_code = this.state.index_code;
     }
     this.setState({
       begin_date: begin_date,
