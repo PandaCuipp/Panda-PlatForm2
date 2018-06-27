@@ -300,7 +300,7 @@ export default class FactorMessage extends PureComponent {
 
     let personData = [];
     if(action == 1){
-      personDta = rawDataList;
+      personData = rawDataList;
       personData.push(entity);
     }else if(action == 2){
       for(let m of rawDataList){
@@ -508,10 +508,8 @@ export default class FactorMessage extends PureComponent {
           const {currentFactorInfo} = this.props.factor_model;
           if(currentFactorInfo && currentFactorInfo.factorid !== ""){
             message.success('删除成功');
-            let p_d = 0;
-            if(currentFactorInfo.scope == 'person'){
-              p_d = 1;
-            }else if(currentFactorInfo.scope == 'department'){
+            let p_d = 1;
+            if(currentFactorInfo.scope == 'department'){
               p_d = 2;
             }
             this.updateDataList(p_d,3,currentFactorInfo);
