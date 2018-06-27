@@ -479,10 +479,8 @@ export default class FactorMessage extends PureComponent {
               modalVisible: false,
             });
             //新增成功，重新请求接口
-            let p_d = 0;
-            if(currentFactorInfo.scope == 'person'){
-              p_d = 1;
-            }else if(currentFactorInfo.scope == 'department'){
+            let p_d = 1;
+            if(currentFactorInfo.scope == 'department'){
               p_d = 2;
             }
             this.updateDataList(p_d,2,currentFactorInfo);
