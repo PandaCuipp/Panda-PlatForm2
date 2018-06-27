@@ -30,6 +30,8 @@ export default class BrinsonList extends Component {
     tableData: [],
     columns2: [],
     tableData2: [],
+    columns3: [],
+    tableData3: [],
     strategyInfo: {},
     index_code:'000300',
   };
@@ -160,11 +162,53 @@ export default class BrinsonList extends Component {
           },
         ];
 
+        //3 合并
+        const tableData3 = []; //行业配置和交叉股
+        for (let i = 0; i < indexData.length; i++) {
+          tableData3.push({
+            index: i + 1,
+            "col0": indexData[i],
+            "col1": exContribution[i],
+            "col2": configData[i],
+            "col3": stockcrossData[i],
+          });
+        }
+        const columns3 = [
+          {
+            title: '项目',
+            dataIndex: 'col0',
+            key: 'col0',
+          },
+          {
+            title: '超额贡献',
+            dataIndex: 'col1',
+            key: 'col1',
+            //sorter: (a, b) => a.count - b.count,
+            className: styles.alignRight,
+          },
+          {
+            title: '行业配置',
+            dataIndex: 'col2',
+            key: 'col2',
+            //sorter: (a, b) => a.count - b.count,
+            className: styles.alignRight,
+          },
+          {
+            title: '选股+交叉',
+            dataIndex: 'col3',
+            key: 'col3',
+            //sorter: (a, b) => a.count - b.count,
+            className: styles.alignRight,
+          },
+        ];
+
         this.setState({
           columns: columns,
           tableData: tableData,
           columns2: columns2,
           tableData2: tableData2,
+          columns3: columns3,
+          tableData3: tableData3,
         });
         //then end
       });
@@ -349,6 +393,7 @@ export default class BrinsonList extends Component {
     }
   };
 
+
   codeChangeHandle = (value)=>{
     //console.log("selectedValue:"+value);
     this.setState({
@@ -361,11 +406,12 @@ export default class BrinsonList extends Component {
   }
 
   render() {
+    console.log("Brinson归因:")
     console.log(this.state);
+    console.log(this.props);
     const { brinson, loading } = this.props;
-    const { columns, tableData, columns2, tableData2, strategyInfo } = this.state;
-    console.log('strategyInfo');
-    console.log(strategyInfo);
+    const { columns, tableData, columns2, tableData2,columns3, tableData3, strategyInfo } = this.state;
+
     let strName = '';
     if(strategyInfo != undefined){
       strName = strategyInfo.strategy_name;
@@ -382,7 +428,8 @@ export default class BrinsonList extends Component {
               </p>
             </Col>
             <Col  md={12} sm={12}>
-              <Select onChange={this.codeChangeHandle} defaultValue={this.state.index_code} style={{ width: 250 }}>
+            样本空间：
+              <Select label="" onChange={this.codeChangeHandle} defaultValue={this.state.index_code} style={{ width: 250 }}>
                 <Option value="000300">沪深300</Option>
                 <Option value="000905">中证500</Option>
                 <Option value="000906">中证800</Option>
@@ -408,7 +455,7 @@ export default class BrinsonList extends Component {
               </Button>
             </Col>
             <Col md={12} sm={24}>
-              <Button type="primary" icon="table" onClick={() => this.scrollToAnchor('table1')}>
+              <Button type="primary" icon="table" onClick={() => this.scrollToAnchor('table3')}>
                 详细数据
               </Button>
             </Col>
@@ -432,7 +479,7 @@ export default class BrinsonList extends Component {
               </Button>
             </Col>
             <Col md={12} sm={24}>
-              <Button type="primary" icon="table" onClick={() => this.scrollToAnchor('table2')}>
+              <Button type="primary" icon="table" onClick={() => this.scrollToAnchor('table3')}>
                 详细数据
               </Button>
             </Col>
@@ -479,6 +526,24 @@ export default class BrinsonList extends Component {
               pageSize: 100,
             }}
             id="table2"
+          />
+        </Card>
+        <Card
+          className="hide"
+          loading={loading}
+          bordered={false}
+          style={{ marginTop: 24, textAlign: 'center' }}
+        >
+          <Table
+            rowKey={record => record.index}
+            size="small"
+            columns={columns3}
+            dataSource={tableData3}
+            pagination={{
+              style: { marginBottom: 0 },
+              pageSize: 100,
+            }}
+            id="table3"
           />
         </Card>
       </Fragment>

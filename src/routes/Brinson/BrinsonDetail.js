@@ -48,16 +48,16 @@ export default class BrinsonDetail extends Component {
       end_date: end_date,
     });
 
-    this.props
-      .dispatch({
-        type: 'brinson/getStrategyInfo',
-        payload: {
-          strategy_id,
-        },
-      })
-      .then(() => {
-        this.setState({ strategyInfo: this.props.brinson.strategyInfo });
-      });
+    // this.props
+    //   .dispatch({
+    //     type: 'brinson/getStrategyInfo',
+    //     payload: {
+    //       strategy_id,
+    //     },
+    //   })
+    //   .then(() => {
+    //     this.setState({ strategyInfo: this.props.brinson.strategyInfo });
+    //   });
 
     this.props
       .dispatch({
@@ -124,6 +124,11 @@ export default class BrinsonDetail extends Component {
   }
 
   render() {
+    
+    console.log("Brinson归因明细:")
+    console.log(this.state);
+    console.log(this.props);
+
     const { brinson, loading } = this.props;
     const { strategyInfo } = brinson;
     const { columns, tableData } = this.state;
