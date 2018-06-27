@@ -329,7 +329,7 @@ export default class FactorMessage extends PureComponent {
         //departmentDataList:departmentDataList,
       });
     }
-    console("updateDataList"+p_d+","+action);
+    console.log("updateDataList"+p_d+","+action);
     console.log(entity);
     this.loadDataList();
   }
