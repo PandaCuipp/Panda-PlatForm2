@@ -69,18 +69,18 @@ function getFlatMenuData(menus) {
 
 export const getRouterData = app => {
   const routerConfig = {
-  	// '/factor/message': {
-   //    name: '单因子信息管理',
-   //    component: dynamicWrapper(app, ['project', 'activities'], () =>
-   //      import('../routes/Factor/FactorMessage')
-   //    ),
-   //  },
-   //  '/factor/check': {
-   //    name: '单因子检验',
-   //    component: dynamicWrapper(app, ['project', 'activities'], () =>
-   //      import('../routes/Factor/FactorCheck')
-   //    ),
-   //  },
+  	'/factor/message': {
+      name: '单因子信息管理',
+      component: dynamicWrapper(app, ['project', 'activities'], () =>
+        import('../routes/Factor/FactorMessage')
+      ),
+    },
+    '/factor/check': {
+      name: '单因子检验',
+      component: dynamicWrapper(app, ['project', 'activities'], () =>
+        import('../routes/Factor/FactorCheck')
+      ),
+    },
     '/brinson/list':{
       name:'Brinson归因',
       component: dynamicWrapper(app, ['project', 'activities', 'chart'], () =>

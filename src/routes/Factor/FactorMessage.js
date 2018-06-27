@@ -22,15 +22,13 @@ const CreateForm = Form.create()(props => {
   const { dispatch,parentThis,modalVisible,modalAction,confirmLoading,factorEntity, 
           form, handleAdd, handleModalVisible } = props;
   
-  const { uploading,fileList } = parentThis.state;
+  const { fileList } = parentThis.state;
 
   //点击确定按钮，验证表单，先上传文件，再调用父方法，上传因子数据
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
-      
       parentThis.setState({
-        uploading: true,
         confirmLoading:true,
       });
       handleUpload((filepath)=>{
@@ -38,10 +36,10 @@ const CreateForm = Form.create()(props => {
         if(filepath == ''){
           filepath = factorEntity.filepath;
         }
-        //handleUpload();
+        const usercode = common.getParamFromURLOrCookie('usercode', true);
         handleAdd(modalAction,{
           ...fieldsValue,
-          authorcode:'currentUser',
+          authorcode:usercode,
           filepath:filepath,
           uploaddate:new Date().getTime(),
         });
@@ -66,30 +64,6 @@ const CreateForm = Form.create()(props => {
       formData.append('file', file);
     });
 
-    //常规方法：不行
-    // dispatch({
-    //   type:'factor_model/upload',
-    //   payload:{
-    //       file:formData,
-    //   },
-    // }).then(()=>{
-    //   console.log(parentThis.props)
-    //   parentThis.setState({
-    //     uploading: false,
-    //   });
-    //   const{factor_model} = parentThis.props;
-    //   if(!factor_model || !factor_model.filepath){
-    //     parentThis.setState({
-    //       uploading: false,
-    //       confirmLoading:false,
-    //     });
-    //     message.error('因子文件上传失败');
-    //     return;
-    //   }
-    //   callback(factor_model.filepath);
-    // });
-
-
     reqwest({
       //url: '/api2/quant-policymanager/factorfile',
       url: 'https://quant-dev.phfund.com.cn/quant-policymanager/factorfile',
@@ -103,7 +77,6 @@ const CreateForm = Form.create()(props => {
           let filepath = data;
           if(!filepath){
             parentThis.setState({
-              uploading: false,
               confirmLoading:false,
             });
             message.error('因子文件上传失败');
@@ -112,7 +85,6 @@ const CreateForm = Form.create()(props => {
 
           parentThis.setState({
             fileList:[],
-            uploading: false,
           });
           callback(filepath);
       },
@@ -120,7 +92,6 @@ const CreateForm = Form.create()(props => {
         console.log('error');
         console.log(error);
         parentThis.setState({
-            uploading: false,
             confirmLoading:false,
           });
           message.error('因子文件上传失败');
@@ -143,7 +114,6 @@ const CreateForm = Form.create()(props => {
       console.log(fileList);
       parentThis.setState({
           fileList:newfileList,
-          uploading:false,
       });
     }
   };
@@ -194,7 +164,7 @@ const CreateForm = Form.create()(props => {
       title={title}
       visible={modalVisible}
       onOk={okHandle}
-      confirmLoading={uploading || confirmLoading}
+      confirmLoading={confirmLoading}
       onCancel={() => handleModalVisible()}
       okText={okText}
     >
@@ -283,7 +253,6 @@ export default class FactorMessage extends PureComponent {
     modalVisible: false, //增加、修改框 是否显示
     confirmLoading: false,  //是否正在提交数据库
     fileList: [], //上传文件
-    uploading: false, //是否正在上传文件
   };
 
   componentDidMount() {
@@ -399,11 +368,13 @@ export default class FactorMessage extends PureComponent {
   //flag:1-新增；2-修改
   showModal = (flag,entity) => {
     console.log("showModal");
+
     this.setState({
       modalAction:flag,
       factorEntity:entity,
       modalVisible: true,
       confirmLoading:false,
+      fileList:[],
     });
   }
 
@@ -434,7 +405,10 @@ export default class FactorMessage extends PureComponent {
             //新增成功，重新请求接口
             this.loadDataList();
           }else{
-            message.success('新增失败');
+            message.error('新增失败');
+            this.setState({
+              confirmLoading:false,
+            });
           }
 
         });
@@ -455,7 +429,10 @@ export default class FactorMessage extends PureComponent {
             this.loadDataList();
           }
           else{
-            message.success('修改失败');
+            message.error('修改失败');
+            this.setState({
+              confirmLoading:false,
+            });
           }
         });
     }

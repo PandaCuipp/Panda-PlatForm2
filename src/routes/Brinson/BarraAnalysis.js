@@ -37,10 +37,11 @@ export default class BarraAnalysis extends Component {
 	//生命周期 - 初始化
 	componentDidMount() {
 
-	const strategy_id = common.getParamFromURLOrCookie('strategy_id', true);
-    const index_code = common.getParamFromURLOrCookie('index_code', true);
-    const begin_date = common.getParamFromURLOrCookie('begin_date', true);
-    var trade_date = common.getParamFromURLOrCookie('trade_date', true);
+	const strategy_id = common.getParamFromURLOrCookie('stg_id', true);
+    const index_code = common.getParamFromURLOrCookie('init_scale', true);
+    const begin_date = common.getParamFromURLOrCookie('startdate', true);
+    const end_date = common.getParamFromURLOrCookie('enddate', true);
+    const usercode = common.getParamFromURLOrCookie('usercode', true);
     if(!strategy_id){
       return;
     }
