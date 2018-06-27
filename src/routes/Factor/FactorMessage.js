@@ -67,14 +67,15 @@ const CreateForm = Form.create()(props => {
     reqwest({
       //url: '/api2/quant-policymanager/factorfile',
       url: 'https://quant-dev.phfund.com.cn/quant-policymanager/factorfile',
-      method: 'POST',
+      method: 'post',
+      type: 'jsonp',
       processData: false,
       data: formData,
       success: (data) => {
           console.log('success data');
           console.log(data);
 
-          let filepath = data;
+          let filepath = data.filepath;
           if(!filepath){
             parentThis.setState({
               confirmLoading:false,
@@ -103,15 +104,12 @@ const CreateForm = Form.create()(props => {
   //添加上传文件
   const addFile=(file)=>{
     console.log('addFile:');
-    console.log(file);
-    console.log(message);
     if(file){
       if(fileList.filter(item=>item.name === file.name).length > 0){
         message.warn('【'+file.name+'】文件已添加');
       }
       fileList.push(file);
       let newfileList = fileList.slice();
-      console.log(fileList);
       parentThis.setState({
           fileList:newfileList,
       });
@@ -293,8 +291,9 @@ export default class FactorMessage extends PureComponent {
       return;
     }
 
-    let personData = this.state.personDataList.slice();
+    let personData = [];
     if(action == 1){
+      personDta = rawDataList;
       personData.push(entity);
     }else if(action == 2){
       for(let m of rawDataList){
