@@ -64,61 +64,40 @@ const CreateForm = Form.create()(props => {
       formData.append('file', file);
     });
 
-    console.log("====================================");
     reqwest({
-      url:'https://quant-dev.phfund.com.cn/quant-policymanager/factorfile?foo=bar',
-      method:'post',
-      type:'jsonp',
-      processData:false,
-      data:formData,
-      jsonpCallback:'foo',
-    }).then(function (resp) {
-        console.log("then========================");
-        console.log(resp);
-      })
-      .fail(function (err, msg) {
-        console.log("fail========================");
-        console.log(err);
-        console.log(msg);
-      })
-      .always(function (resp) {
-        console.log("always========================");
-        console.log(resp);
-      });
-    // reqwest({
-    //   //url: '/api2/quant-policymanager/factorfile',
-    //   url: 'https://quant-dev.phfund.com.cn/quant-policymanager/factorfile',
-    //   method: 'post',
-    //   //type: 'jsonp',
-    //   processData: false,
-    //   data: formData,
-    //   success: (data) => {
-    //       console.log('success data');
-    //       console.log(data);
+      //url: '/api2/quant-policymanager/factorfile',
+      url: 'https://quant-dev.phfund.com.cn/quant-policymanager/factorfile',
+      method: 'post',
+      //type: 'jsonp',
+      processData: false,
+      data: formData,
+      success: (data) => {
+          console.log('success data');
+          console.log(data);
 
-    //       let filepath = data.filepath;
-    //       if(!filepath){
-    //         parentThis.setState({
-    //           confirmLoading:false,
-    //         });
-    //         message.error('因子文件上传失败');
-    //         return;
-    //       }
+          let filepath = data.filepath;
+          if(!filepath){
+            parentThis.setState({
+              confirmLoading:false,
+            });
+            message.error('因子文件上传失败');
+            return;
+          }
 
-    //       parentThis.setState({
-    //         fileList:[],
-    //       });
-    //       callback(filepath);
-    //   },
-    //   error: (error) => {
-    //     console.log('error');
-    //     console.log(error);
-    //     parentThis.setState({
-    //         confirmLoading:false,
-    //       });
-    //       message.error('因子文件上传失败');
-    //   },
-    // });
+          parentThis.setState({
+            fileList:[],
+          });
+          callback(filepath);
+      },
+      error: (error) => {
+        console.log('error');
+        console.log(error);
+        parentThis.setState({
+            confirmLoading:false,
+          });
+          message.error('因子文件上传失败');
+      },
+    });
 
   }
 
