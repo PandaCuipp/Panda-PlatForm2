@@ -73,13 +73,16 @@ const CreateForm = Form.create()(props => {
       data:formData,
       jsonpCallback:'foo',
     }).then(function (resp) {
+        console.log("then========================");
         console.log(resp);
       })
       .fail(function (err, msg) {
+        console.log("fail========================");
         console.log(err);
         console.log(msg);
       })
       .always(function (resp) {
+        console.log("always========================");
         console.log(resp);
       });
     // reqwest({
