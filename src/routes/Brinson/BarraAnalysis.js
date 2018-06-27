@@ -42,6 +42,7 @@ export default class BarraAnalysis extends Component {
     const begin_date = common.getParamFromURLOrCookie('startdate', true);
     const end_date = common.getParamFromURLOrCookie('enddate', true);
     const usercode = common.getParamFromURLOrCookie('usercode', true);
+    var trade_date = common.getParamFromURLOrCookie('trade_date', true);
     if(!strategy_id){
       return;
     }
