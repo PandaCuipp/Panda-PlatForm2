@@ -68,7 +68,7 @@ const CreateForm = Form.create()(props => {
       //url: '/api2/quant-policymanager/factorfile',
       url: 'https://quant-dev.phfund.com.cn/quant-policymanager/factorfile',
       method: 'post',
-      type: 'jsonp',
+      //type: 'jsonp',
       processData: false,
       data: formData,
       success: (data) => {
@@ -313,12 +313,12 @@ export default class FactorMessage extends PureComponent {
 
     if(p_d == 1){
       this.setState({
-        personDataList:personData,
+        personDataList:personData.slice(),
         //departmentDataList:departmentDataList,
       });
     }else if(p_d == 2){
       this.setState({
-        departmentDataList:personData,
+        departmentDataList:personData.slice(),
         //departmentDataList:departmentDataList,
       });
     }

@@ -55,9 +55,16 @@ export default class BrinsonList extends Component {
         },
       })
       .then(() => {
+        if(!this.props.brinson.strategyInfo){
+          return;
+        }
         this.setState({ strategyInfo: this.props.brinson.strategyInfo });
+        this.initData(strategy_id, strategyInfo.strategy_code, begin_date, end_date)
       });
 
+  }
+
+  initData=(strategy_id, index_code, begin_date, end_date)=>{
     this.props
       .dispatch({
         type: 'brinson/getBrinson',
