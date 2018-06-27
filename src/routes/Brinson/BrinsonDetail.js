@@ -118,10 +118,10 @@ export default class BrinsonDetail extends Component {
   }
 
   //下载
-  // downloadExcel = (id,excelName)=>{
-  //   var tableInnerHtml = $("#"+ id).find("table").html();
-  //   exportExcel.exprotTableHtmlExcel(tableInnerHtml,excelName);
-  // }
+  downloadExcel = (id,excelName)=>{
+    var tableInnerHtml = $("#"+ id).find("table").html();
+    exportExcel.exprotTableHtmlExcel(tableInnerHtml,excelName);
+  }
 
   render() {
     const { brinson, loading } = this.props;
@@ -137,6 +137,18 @@ export default class BrinsonDetail extends Component {
         <NavigationBar currentKey={this.state.currentTabKey} />
 
         <Card loading={loading} bordered={true} style={{ textAlign: 'center' }}>
+          <Row>
+            <Col md={12} sm={24}>
+              <Button
+                type="primary"
+                icon="download"
+                onClick={() => this.downloadExcel('table1', 'Brinson归因明细')}
+              >
+                导出Excel
+              </Button>
+            </Col>
+            
+          </Row>
           <Row>
             <Col md={12} sm={24}>
               <p>
