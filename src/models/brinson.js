@@ -2,7 +2,6 @@ import { getBrinsonData, getStrategyInfo,getBarraData,getBarraAnalysisData } fro
 
 export default {
   namespace: 'brinson',
-
   state: {
     brinsonData: {},
     strategyInfo: {},

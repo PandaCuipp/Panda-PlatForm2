@@ -6,6 +6,7 @@
 export function getQueryVariable(variable) {
     var query = window.location.href;
     //var query = "http://192.168.250.12:30000/performance/brinson?strategy_id=B0000000000000000000000000002314&index_code=000905&begin_date=20180228&end_date=20180525";
+    //var query = 'http://localhost:8000/#/brinson/list?stg_id=B0000000000000000000000000002314&freq=D&init_scale=100&startDate=20171106&endDate=20171119&usercode=admin';
     if(query.indexOf("?") < 0 || variable == ""){
         return "";
     }
