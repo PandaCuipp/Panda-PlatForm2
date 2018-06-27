@@ -91,7 +91,8 @@ const CreateForm = Form.create()(props => {
 
 
     reqwest({
-      url: '/api2/quant-policymanager/factorfile',
+      //url: '/api2/quant-policymanager/factorfile',
+      url: 'https://quant-dev.phfund.com.cn/quant-policymanager/factorfile',
       method: 'POST',
       processData: false,
       data: formData,

@@ -11,8 +11,8 @@ import { getFakeBrinson } from './mock/brinson';
 import { factorData,upload } from './mock/factor';
 
 // 是否禁用代理
-const noProxy = process.env.NO_PROXY === 'true';
-//const noProxy = true;
+//const noProxy = process.env.NO_PROXY === 'true';
+const noProxy = true;
 
 const server1 = 'http://192.168.250.12:30000';
 const server2 = 'https://quant-dev.phfund.com.cn';
