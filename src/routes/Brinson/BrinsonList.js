@@ -47,6 +47,7 @@ export default class BrinsonList extends Component {
     this.setState({
       begin_date: begin_date,
       end_date: end_date,
+      strategy_id:strategy_id,
     });
 
     this.props
@@ -355,6 +356,8 @@ export default class BrinsonList extends Component {
     });
 
     common.setCookie("index_code",value,24*60);
+    const {strategy_id, index_code, begin_date, end_date} = this.state;
+    this.initData(strategy_id, index_code, begin_date, end_date);
   }
 
   render() {
