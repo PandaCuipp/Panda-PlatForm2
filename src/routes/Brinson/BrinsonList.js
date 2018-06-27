@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
-import { Row, Col, Card, Table, Button, Icon } from 'antd';
+import { Row, Col, Card, Table, Button, Icon,Select } from 'antd';
 import { NavigationBar } from './NavigationBar';
 // 引入 ECharts 主模块
 import echarts from 'echarts/lib/echarts';
@@ -30,6 +30,7 @@ export default class BrinsonList extends Component {
     columns2: [],
     tableData2: [],
     strategyInfo: {},
+    index_code:'000300',
   };
 
   componentDidMount() {
@@ -59,9 +60,9 @@ export default class BrinsonList extends Component {
           return;
         }
         this.setState({ strategyInfo: this.props.brinson.strategyInfo });
-        this.initData(strategy_id, strategyInfo.strategy_code, begin_date, end_date)
       });
 
+      this.initData(strategy_id, this.state.index_code, begin_date, end_date)
   }
 
   initData=(strategy_id, index_code, begin_date, end_date)=>{
@@ -346,6 +347,13 @@ export default class BrinsonList extends Component {
     }
   };
 
+  codeChangeHandle = (value)=>{
+    //console.log("selectedValue:"+value);
+    this.setState({
+      index_code:value,
+    });
+  }
+
   render() {
     console.log(this.state);
     const { brinson, loading } = this.props;
@@ -362,12 +370,19 @@ export default class BrinsonList extends Component {
 
         <Card loading={loading} bordered={true} style={{ textAlign: 'center' }}>
           <Row>
-            <Col md={12} sm={24}>
+            <Col md={12} sm={12}>
               <p>
                 策略：<span>{strName}</span>
               </p>
             </Col>
-            <Col md={12} sm={24}>
+            <Col  md={12} sm={12}>
+              <Select onChange={this.codeChangeHandle} defaultValue={this.state.index_code} style={{ width: 250 }}>
+                <Option value="000300">沪深300</Option>
+                <Option value="000905">中证500</Option>
+                <Option value="000906">中证800</Option>
+              </Select>
+            </Col>
+            <Col md={12} sm={12}>
               <p>
                 日期：<span>
                   {this.state.begin_date}~{this.state.end_date}
