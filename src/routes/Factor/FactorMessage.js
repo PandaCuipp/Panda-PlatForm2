@@ -281,6 +281,51 @@ export default class FactorMessage extends PureComponent {
     });
   }
 
+  //p_d:1 person,2 department
+  //1新增，2修改，3删除个人
+  updateDataList=(p_d,action,entity)=>{
+    let rawDataList;
+    if(p_d == 1){
+      rawDataList = this.state.personDataList;
+    }else if(p_d == 2){
+      rawDataList = this.state.departmentDataList;
+    }else {
+      return;
+    }
+
+    let personData = this.state.personDataList.slice();
+    if(action == 1){
+      personData.push(entity);
+    }else if(action == 2){
+      for(let m of rawDataList){
+        if(m.factorid == entity.factorid){
+          personData.push(entity);
+        }else{
+          personData.push(m);
+        }
+      }
+    }else if(action == 3){
+      for(let m of rawDataList){
+        if(m.factorid != entity.factorid){
+          personData.push(m);
+        }
+      }
+    }
+
+    if(p_d == 1){
+      this.setState({
+        personDataList:personData,
+        //departmentDataList:departmentDataList,
+      });
+    }else if(p_d == 2){
+      this.setState({
+        departmentDataList:personData,
+        //departmentDataList:departmentDataList,
+      });
+    }
+    
+  }
+
   handleSearch = e => {
     e.preventDefault();
 
@@ -403,7 +448,7 @@ export default class FactorMessage extends PureComponent {
               modalVisible: false,
             });
             //新增成功，重新请求接口
-            this.loadDataList();
+            this.updateDataList(1,1,currentFactorInfo);
           }else{
             message.error('新增失败');
             this.setState({
@@ -426,7 +471,13 @@ export default class FactorMessage extends PureComponent {
               modalVisible: false,
             });
             //新增成功，重新请求接口
-            this.loadDataList();
+            let p_d = 0;
+            if(currentFactorInfo.scope == 'person'){
+              p_d = 1;
+            }else if(currentFactorInfo.scope == 'department'){
+              p_d = 2;
+            }
+            this.updateDataList(p_d,2,currentFactorInfo);
           }
           else{
             message.error('修改失败');
@@ -449,8 +500,15 @@ export default class FactorMessage extends PureComponent {
           const {currentFactorInfo} = this.props.factor_model;
           if(currentFactorInfo && currentFactorInfo.factorid !== ""){
             message.success('删除成功');
+            let p_d = 0;
+            if(currentFactorInfo.scope == 'person'){
+              p_d = 1;
+            }else if(currentFactorInfo.scope == 'department'){
+              p_d = 2;
+            }
+            this.updateDataList(p_d,3,currentFactorInfo);
           }else{
-            message.success('删除失败');
+            message.error('删除失败');
           }
         });
   }
@@ -466,8 +524,11 @@ export default class FactorMessage extends PureComponent {
             const {currentFactorInfo} = this.props.factor_model;
             if(currentFactorInfo && currentFactorInfo.factorid !== ""){
               message.success('提交成功');
+              factorInfo.scope = 'person';
+              this.updateDataList(1,3,factorInfo);
+              this.updateDataList(2,1,currentFactorInfo);
             }else{
-              message.success('提交失败');
+              message.error('提交失败');
             }
           });
   }
