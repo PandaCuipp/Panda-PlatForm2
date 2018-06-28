@@ -43,8 +43,13 @@ export default class BrinsonList extends Component {
     const begin_date = common.getParamFromURLOrCookie('startdate', true);
     const end_date = common.getParamFromURLOrCookie('enddate', true);
     const usercode = common.getParamFromURLOrCookie('usercode', true);
-    if(!strategy_id){
+    if(!strategy_id || strategy_id == ''){
       return;
+    }else{
+      this.props.dispatch({
+        type:'brinson/getUrlParamStr',
+      });
+      
     }
     this.setState({
       begin_date: begin_date,

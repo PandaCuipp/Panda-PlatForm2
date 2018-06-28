@@ -7,6 +7,7 @@ export default {
     strategyInfo: {},
     barraData:{},
     barraAnalysisData:{},
+    urlParamStr:'',
   },
 
   effects: {
@@ -51,6 +52,20 @@ export default {
         },
       });
     },
+    //获取策略
+    *getUrlParamStr({payload}, { call, put }) {
+      var query = window.location.href;
+      let response = '';
+      if(query.indexOf("?") < 0){
+        response = query.split("?")[1];
+      }
+      yield put({
+        type: 'saveUrlParamStr',
+        payload: {
+          urlParamStr: response,
+        },
+      });
+    },
   },
 
   reducers: {
@@ -59,6 +74,16 @@ export default {
         ...state,
         ...payload,
       };
+    },
+    saveUrlParamStr(state,{payload}){
+      if(payload.urlParamStr == ''){
+        return {...state};
+      }else{
+        return {
+        ...state,
+        ...payload,
+      };
+      }
     },
     clear() {
       return {
