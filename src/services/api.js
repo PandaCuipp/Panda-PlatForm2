@@ -6,10 +6,14 @@ import request from '../utils/request';
 const noProxy = true;
 
 const server1 = 'http://192.168.250.12:30000';
-const server2 = 'https://quant-dev.phfund.com.cn';
+const server2 = 'http://quant-dev.phfund.com.cn';
+const server1s = 'https://192.168.250.12:30000';
+const server2s = 'https://quant-dev.phfund.com.cn';
 
 const api1 = server1;
 const api2 = server2;
+const api1s = server1s;
+const api2s = server2s;
 //========================请求Brinson模块数据=============================
 
 //获取策略详情

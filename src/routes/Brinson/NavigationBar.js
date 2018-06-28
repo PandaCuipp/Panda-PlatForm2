@@ -19,8 +19,6 @@ export class NavigationBar extends Component{
         //this.state = { isLiked: false }
     }
     componentDidMount(){
-    	//console.log("window");
-    	//console.log(window.location);
     	//this.addUrlParamToMenu();
 
     	const strategy_id = common.getParamFromURLOrCookie('stg_id', true);
