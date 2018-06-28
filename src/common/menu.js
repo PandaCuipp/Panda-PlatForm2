@@ -1,7 +1,7 @@
 import { isUrl } from '../utils/utils';
 
 const menuData = [
-	{
+  {
     name: '单因子管理',
     icon: 'appstore',
     path: 'factor',
@@ -22,24 +22,28 @@ const menuData = [
     path: 'brinson',
     children: [
       {
-        name: 'Brinson归因',
+        name: '归因',
         path: 'list',
       },
       {
         name: 'Brinson归因明细',
         path: 'detail',
+        hideInMenu: true,
       },
       {
         name: 'Barra多因子归因',
         path: 'barra',
+        hideInMenu: true,
       },
       {
         name: 'Barra多因子归因明细',
         path: 'barra_detail',
+        hideInMenu: true,
       },
       {
         name: 'Barra风险分析',
         path: 'barra_analysis',
+        hideInMenu: true,
       },
     ],
   },
@@ -84,43 +88,43 @@ const menuData = [
   //     },
   //   ],
   // },
-   // {
-   //   name: '列表页',
-   //   icon: 'table',
-   //   path: 'list',
-   //   children: [
-   //     {
-   //       name: '查询表格',
-   //       path: 'table-list',
-   //     },
-   //     {
-   //       name: '标准列表',
-   //       path: 'basic-list',
-   //     },
-   //     {
-   //       name: '卡片列表',
-   //       path: 'card-list',
-   //     },
-   //     {
-   //       name: '搜索列表',
-   //       path: 'search',
-   //       children: [
-   //         {
-   //           name: '搜索列表（文章）',
-   //           path: 'articles',
-   //         },
-   //         {
-   //           name: '搜索列表（项目）',
-   //           path: 'projects',
-   //         },
-   //         {
-   //           name: '搜索列表（应用）',
-   //           path: 'applications',
-   //         },
-   //       ],
-   //     },
-   //   ],
-   // },
+  // {
+  //   name: '列表页',
+  //   icon: 'table',
+  //   path: 'list',
+  //   children: [
+  //     {
+  //       name: '查询表格',
+  //       path: 'table-list',
+  //     },
+  //     {
+  //       name: '标准列表',
+  //       path: 'basic-list',
+  //     },
+  //     {
+  //       name: '卡片列表',
+  //       path: 'card-list',
+  //     },
+  //     {
+  //       name: '搜索列表',
+  //       path: 'search',
+  //       children: [
+  //         {
+  //           name: '搜索列表（文章）',
+  //           path: 'articles',
+  //         },
+  //         {
+  //           name: '搜索列表（项目）',
+  //           path: 'projects',
+  //         },
+  //         {
+  //           name: '搜索列表（应用）',
+  //           path: 'applications',
+  //         },
+  //       ],
+  //     },
+  //   ],
+  // },
   // {
   //   name: '详情页',
   //   icon: 'profile',
