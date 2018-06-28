@@ -38,31 +38,42 @@ export default class BrinsonList extends Component {
 
   componentDidMount() {
 
-    const strategy_id = common.getParamFromURLOrCookie('stg_id', true);
-    const index_code = common.getParamFromURLOrCookie('init_scale', true);
-    const begin_date = common.getParamFromURLOrCookie('startdate', true);
-    const end_date = common.getParamFromURLOrCookie('enddate', true);
-    const usercode = common.getParamFromURLOrCookie('usercode', true);
+    let strategy_id = common.getQueryVariable('stg_id');
+    let index_code = common.getQueryVariable('index_code');
+    let begin_date = common.getQueryVariable('startdate');
+    let end_date = common.getQueryVariable('enddate');
+    let usercode = common.getQueryVariable('usercode');
+    
     if(!strategy_id || strategy_id == ''){
-      //var query = window.location.href;
-      this.props.dispatch({
-        type:'brinson/getUrlParamStr',
-      }).then(()=>{
-        const{urlParamStr} = this.props.brinson;
-        if(urlParamStr){
-          window.location.href = window.location.href +"?"+urlParamStr;
-        }
-      });
-      return;
+      const{urlParamStr} = this.props.brinson;
+      if(urlParamStr){
+        let url = window.location.href +"?"+urlParamStr;
+        let strategy_id = common.getQueryVariable('stg_id',url);
+        let index_code = common.getQueryVariable('index_code',url);
+        let begin_date = common.getQueryVariable('startdate',url);
+        let end_date = common.getQueryVariable('enddate',url);
+        let usercode = common.getQueryVariable('usercode',url);
+        this.setState({
+          begin_date: begin_date,
+          end_date: end_date,
+          strategy_id:strategy_id,
+          index_code:index_code,
+        });
+        window.location.href = url;
+      }else{
+        return;
+      }
     }else{
       this.props.dispatch({
         type:'brinson/getUrlParamStr',
-      });     
+      }); 
     }
+
     this.setState({
       begin_date: begin_date,
       end_date: end_date,
       strategy_id:strategy_id,
+      index_code:index_code,
     });
 
     this.props
@@ -405,9 +416,13 @@ export default class BrinsonList extends Component {
     this.setState({
       index_code:value,
     });
-
-    common.setCookie("index_code",value,24*60);
-    const {strategy_id, index_code, begin_date, end_date} = this.state;
+    this.props.dispatch({
+      type:'brinson/getUrlParamStr',
+      payload:{
+        index_code:value,
+      }
+    });
+    const{strategy_id, begin_date, end_date} = this.state;
     this.initData(strategy_id, value, begin_date, end_date);
   }
 

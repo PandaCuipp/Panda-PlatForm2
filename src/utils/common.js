@@ -3,8 +3,11 @@
  * 获取url参数
  * variable：要获取的字段名称
  */
-export function getQueryVariable(variable) {
+export function getQueryVariable(variable,url = '') {
     var query = window.location.href;
+    if(url != ''){
+        query = url;
+    }
     //var query = "http://192.168.250.12:30000/performance/brinson?strategy_id=B0000000000000000000000000002314&index_code=000905&begin_date=20180228&end_date=20180525";
     //var query = 'http://localhost:8000/#/brinson/list?stg_id=B0000000000000000000000000002314&freq=D&init_scale=100&startDate=20171106&endDate=20171119&usercode=admin';
     if(query.indexOf("?") < 0 || variable == ""){
@@ -18,6 +21,22 @@ export function getQueryVariable(variable) {
         }
     }
     return "";
+}
+
+export function setQueryVariable(query,variable,value){
+    if(!query || query === ''){
+        return "";
+    }
+    var list = query.split("&");
+    var newquery = variable+'='+value;
+    for(var i=0;i<list.length;i++){
+        newquery += "&";
+        var pair = list[i].split("=");
+        if(pair[0].toLowerCase() != variable.toLowerCase()) {
+            newquery+=list[i];
+        }
+    }
+    return newquery;
 }
 
 /*

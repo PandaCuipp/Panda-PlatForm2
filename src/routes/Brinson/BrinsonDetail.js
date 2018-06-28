@@ -32,13 +32,19 @@ export default class BrinsonDetail extends Component {
 
   componentDidMount() {
 
-    const strategy_id = common.getParamFromURLOrCookie('stg_id', true);
-    let index_code = common.getParamFromURLOrCookie('index_code', true);
-    const begin_date = common.getParamFromURLOrCookie('startdate', true);
-    const end_date = common.getParamFromURLOrCookie('enddate', true);
-    const usercode = common.getParamFromURLOrCookie('usercode', true);
-    if(!strategy_id){
-      return;
+    let strategy_id = common.getQueryVariable('stg_id');
+    let index_code = common.getQueryVariable('index_code');
+    let begin_date = common.getQueryVariable('startdate');
+    let end_date = common.getQueryVariable('enddate');
+    let usercode = common.getQueryVariable('usercode');
+    
+    if(!strategy_id || strategy_id == ''){
+      const{urlParamStr} = this.props.brinson;
+      if(urlParamStr){
+        window.location.href = window.location.href +"?"+urlParamStr;
+      }else{
+        return;
+      }
     }else{
       this.props.dispatch({
         type:'brinson/getUrlParamStr',

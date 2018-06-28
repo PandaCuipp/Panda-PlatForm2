@@ -20,12 +20,12 @@ export class NavigationBar extends Component{
     }
     componentDidMount(){
     	//this.addUrlParamToMenu();
-    	const strategy_id = common.getParamFromURLOrCookie('stg_id', true);
-    	if(strategy_id){
-	      this.props.dispatch({
-	        type:'brinson/getUrlParamStr',
-	      });
-	    }
+    	// const strategy_id = common.getParamFromURLOrCookie('stg_id', true);
+    	// if(strategy_id){
+	    //   this.props.dispatch({
+	    //     type:'brinson/getUrlParamStr',
+	    //   });
+	    // }
     }
 
     // addUrlParamToMenu = ()=>{
@@ -67,7 +67,8 @@ export class NavigationBar extends Component{
       	//window.location.href = window.location.href.split("?")[0] + "?" + this.props.brinson.getUrlParamStr;
 	    var query = window.location.href;
 	    if(query.indexOf("?") >= 0){
-	    	window.location.href = window.location.origin + url +"?"+query.split("?")[1];
+	    	const{ urlParamStr } = this.props.brinson;
+	    	window.location.href = window.location.origin + url +"?"+urlParamStr;
 	    }
 	    else{
 	    	this.props.dispatch({
@@ -75,7 +76,7 @@ export class NavigationBar extends Component{
 		      }).then(()=>{
 		      	const{ urlParamStr } = this.props.brinson;
 		      	if(urlParamStr){
-		      		window.location.href = window.location.origin + url + urlParamStr;	
+		      		window.location.href = window.location.origin + url +"?"+ urlParamStr;	
 		      	}
 		    	 else{
 		    	 	window.location.href = window.location.origin + url;
