@@ -72,50 +72,68 @@ const CreateForm = Form.create()(props => {
 
   //开始上传
   const handleUpload = callback => {
-    const formData = new FormData();
+    console.log('fileList');
+    console.log(fileList);
+    // let req = new XMLHttpRequest();
+    // req.open("post","https://quant-dev.phfund.com.cn/quant-policymanager/factorfile",true);
+    // req.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+    // req.onreadystatechange(() => {
+    //   console.log('req');
+    //   console.log(req);
+    // )};
+
     if (!fileList || fileList.length <= 0) {
       console.log('未选择上传的文件');
       callback('');
       return;
     }
-    fileList.forEach(file => {
-      formData.append('file', file);
-    });
+    // req.send(fileList[0]);
+    
+     
+    
+     
+    // const formData = new FormData();
+    // if (!fileList || fileList.length <= 0) {
+    //   console.log('未选择上传的文件');
+    //   callback('');
+    //   return;
+    // }
+    // fileList.forEach(file => {
+    //   formData.append('file', file);
+    // });
 
-    reqwest({
-      //url: '/api2/quant-policymanager/factorfile',
-      url: 'https://quant-dev.phfund.com.cn/quant-policymanager/factorfile',
-      method: 'post',
-      //type: 'jsonp',
-      processData: false,
-      data: formData,
-      success: data => {
-        console.log('success data');
-        console.log(data);
+    // reqwest({
+    //   url: 'https://quant-dev.phfund.com.cn/quant-policymanager/factorfile',
+    //   method: 'post',
+    //   processData: false,
+    //   data: fileList,
+    //   success: data => {
+    //     console.log('success data');
+    //     console.log(data);
 
-        let filepath = data.filepath;
-        if (!filepath) {
-          parentThis.setState({
-            confirmLoading: false,
-          });
-          message.error('因子文件上传失败');
-          return;
-        }
+    //     let filepath = data.filepath;
+    //     if (!filepath) {
+    //       parentThis.setState({
+    //         confirmLoading: false,
+    //       });
+    //       message.error('因子文件上传失败');
+    //       return;
+    //     }
 
-        parentThis.setState({
-          fileList: [],
-        });
-        callback(filepath);
-      },
-      error: error => {
-        console.log('error');
-        console.log(error);
-        parentThis.setState({
-          confirmLoading: false,
-        });
-        message.error('因子文件上传失败');
-      },
-    });
+    //     parentThis.setState({
+    //       fileList: [],
+    //     });
+    //     callback(filepath);
+    //   },
+    //   error: error => {
+    //     console.log('error');
+    //     console.log(error);
+    //     parentThis.setState({
+    //       confirmLoading: false,
+    //     });
+    //     message.error('因子文件上传失败');
+    //   },
+    // });
   };
 
   //添加上传文件
@@ -138,12 +156,6 @@ const CreateForm = Form.create()(props => {
     accept: '.pyc',
     name: 'name',
     showUploadList: true,
-    //action: '/api2/quant-policymanager/factorfile',
-    // action:'https://quant-dev.phfund.com.cn/quant-policymanager/factorfile',
-    // headers: {
-    //   enctype: 'multipart/form-data',
-    //   method: 'POST',
-    // },
     onRemove: file => {
       parentThis.setState(({ fileList }) => {
         const index = fileList.indexOf(file);
@@ -241,7 +253,7 @@ const CreateForm = Form.create()(props => {
 
       <FormItem labelCol={{ span: 5 }} wrapperCol={{ span: 15 }} label="因子文件上传">
         <Upload {...uploadProps}>
-          <Button>
+          <Button type="ghost">
             <Icon type="upload" />选择文件
           </Button>
         </Upload>
@@ -347,8 +359,6 @@ export default class FactorMessage extends PureComponent {
         //departmentDataList:departmentDataList,
       });
     }
-    console.log('updateDataList' + p_d + ',' + action);
-    console.log(entity);
     this.loadDataList();
   };
 
