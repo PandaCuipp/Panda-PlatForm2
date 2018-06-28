@@ -52,7 +52,7 @@ export default {
         },
       });
     },
-    //获取策略
+    //从链接中截取问号后的{链接参数}放入urlParamStr中缓存，链接中不存在{链接入参}时返回缓存的{链接入参}
     *getUrlParamStr({payload}, { call, put }) {
       var query = window.location.href;
       let response = '';

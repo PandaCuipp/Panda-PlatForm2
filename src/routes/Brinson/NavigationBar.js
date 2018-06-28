@@ -20,37 +20,26 @@ export class NavigationBar extends Component{
     }
     componentDidMount(){
     	//this.addUrlParamToMenu();
-
     	const strategy_id = common.getParamFromURLOrCookie('stg_id', true);
-    	if(!strategy_id || strategy_id == ''){
-      		this.props.dispatch({
-	        type:'brinson/getUrlParamStr',
-	      }).then(()=>{
-	      	
-	      });
-	      return;
-	    }else{
+    	if(strategy_id){
 	      this.props.dispatch({
 	        type:'brinson/getUrlParamStr',
-	      }).then(()=>{
-
 	      });
-	      
 	    }
     }
 
-    addUrlParamToMenu = ()=>{
-    	var query = window.location.href;
-    	if(query.indexOf('?') >= 0){
-    		$("#"+$("/brinson$Menu")).find("a").each(()=>{
-    			var that = $this;
-    			var rawUrl = that.attr("href");
-    			if(!rawUrl && rawUrl.indexOf("?") < 0){
-    				var newUrl = rawUrl + "?" + query.split("?")[1];
-    			}
-    		});
-    	}
-    };
+    // addUrlParamToMenu = ()=>{
+    // 	var query = window.location.href;
+    // 	if(query.indexOf('?') >= 0){
+    // 		$("#"+$("/brinson$Menu")).find("a").each(()=>{
+    // 			var that = $this;
+    // 			var rawUrl = that.attr("href");
+    // 			if(!rawUrl && rawUrl.indexOf("?") < 0){
+    // 				var newUrl = rawUrl + "?" + query.split("?")[1];
+    // 			}
+    // 		});
+    // 	}
+    // };
     // componentWillMount(){
     // }
     handleTabChange = key => {

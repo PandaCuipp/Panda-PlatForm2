@@ -46,6 +46,10 @@ export default class BarraAnalysis extends Component {
     var trade_date = common.getParamFromURLOrCookie('trade_date', true);
     if(!strategy_id){
       return;
+    }else{
+      this.props.dispatch({
+        type:'brinson/getUrlParamStr',
+      });     
     }
     if(index_code == ''){
       index_code = this.state.index_code;
@@ -101,12 +105,16 @@ export default class BarraAnalysis extends Component {
 			var columnsData = barraAnalysisData.columns; //行数据
 			var dataData = barraAnalysisData.data;
 
+			if(!columnsData || !indexData){
+				return;
+			}
 			//表头
 			const columns = [{
 				title: '组合/行业',
 				dataIndex: 'col0',
 				key: 'col0',
 			}, ];
+
 			for(let i = 0; i < columnsData.length; i++) {
 				columns.push({
 					title: columnsData[i],

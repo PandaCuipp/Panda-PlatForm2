@@ -44,12 +44,20 @@ export default class BrinsonList extends Component {
     const end_date = common.getParamFromURLOrCookie('enddate', true);
     const usercode = common.getParamFromURLOrCookie('usercode', true);
     if(!strategy_id || strategy_id == ''){
+      //var query = window.location.href;
+      this.props.dispatch({
+        type:'brinson/getUrlParamStr',
+      }).then(()=>{
+        const{urlParamStr} = this.props.brinson;
+        if(urlParamStr){
+          window.location.href = window.location.href +"?"+urlParamStr;
+        }
+      });
       return;
     }else{
       this.props.dispatch({
         type:'brinson/getUrlParamStr',
-      });
-      
+      });     
     }
     this.setState({
       begin_date: begin_date,

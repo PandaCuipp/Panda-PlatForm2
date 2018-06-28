@@ -42,7 +42,12 @@ export default class BarraDetail extends Component {
     const usercode = common.getParamFromURLOrCookie('usercode', true);
     if(!strategy_id){
       return;
+    }else{
+      this.props.dispatch({
+        type:'brinson/getUrlParamStr',
+      });     
     }
+    
     if(index_code == ''){
       index_code = this.state.index_code;
     }
