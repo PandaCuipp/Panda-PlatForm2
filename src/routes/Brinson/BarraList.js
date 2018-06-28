@@ -28,6 +28,8 @@ export default class BarraList extends Component {
     tableData: [],
     columns2: [],
     tableData2: [],
+    columns3: [],
+    tableData3: [],
     strategyInfo: {},
     index_code:'000300',
   };
@@ -95,7 +97,7 @@ export default class BarraList extends Component {
 
         const columns = [
           {
-            title: '项目',
+            title: '组合/行业',
             dataIndex: 'col0', //列少的情况下，就简单用col0……等代替
             key: 'col0',
           },
@@ -109,7 +111,7 @@ export default class BarraList extends Component {
         ];
         const columns2 = [
           {
-            title: '项目',
+            title: '组合/行业',
             dataIndex: 'col0',
             key: 'col0',
           },
@@ -138,21 +140,53 @@ export default class BarraList extends Component {
           });
         }
 
+        //3 合并
+        const tableData3 = []; //组合贡献和超额贡献
+        for (let i = 0; i < index.length; i++) {
+          tableData3.push({
+            index: i + 1,
+            "col0": index[i],
+            "col1": ComContribution[i],
+            "col2": ExContribution[i],
+          });
+        }
+
+        console.log(tableData3);
+        const columns3 = [
+          {
+            title: '组合/行业',
+            dataIndex: 'col0',
+            key: 'col0',
+          },
+          {
+            title: '组合贡献',
+            dataIndex: 'col1',
+            key: 'col1',
+            //sorter: (a, b) => a.count - b.count,
+            className: styles.alignRight,
+          },
+          {
+            title: '超额贡献',
+            dataIndex: 'col2',
+            key: 'col2',
+            //sorter: (a, b) => a.count - b.count,
+            className: styles.alignRight,
+          },
+        ];
+
         this.setState({
           columns: columns,
           columns2: columns2,
           tableData: tableData,
           tableData2: tableData2,
+          columns3: columns3,
+          tableData3: tableData3,
         });
       });
 
   }
 
   componentWillUnmount() {
-    // const { dispatch } = this.props;
-    // dispatch({
-    //   type: 'brinson/clear',
-    // });
   }
 
   //绘制图表1
@@ -275,7 +309,6 @@ export default class BarraList extends Component {
   };
 
   //替代锚点的方案
-  //参考：https://blog.csdn.net/mrhaoxiaojun/article/details/79960792
   scrollToAnchor = anchorName => {
     if (anchorName) {
       // 找到锚点
@@ -303,7 +336,7 @@ export default class BarraList extends Component {
 
   render() {
     const { loading } = this.props;
-    const { columns, columns2, tableData, tableData2,strategyInfo } = this.state;
+    const { columns, columns2, tableData, tableData2,columns3, tableData3,strategyInfo } = this.state;
 
     let strategy_name = '';
     if(strategyInfo != undefined){
@@ -339,7 +372,7 @@ export default class BarraList extends Component {
               </Button>
             </Col>
             <Col md={12} sm={24}>
-              <Button type="primary" icon="table" onClick={() => this.scrollToAnchor('table1')}>
+              <Button type="primary" icon="table" onClick={() => this.scrollToAnchor('table3')}>
                 详细数据
               </Button>
             </Col>
@@ -363,7 +396,7 @@ export default class BarraList extends Component {
               </Button>
             </Col>
             <Col md={12} sm={24}>
-              <Button type="primary" icon="table" onClick={() => this.scrollToAnchor('table2')}>
+              <Button type="primary" icon="table" onClick={() => this.scrollToAnchor('table3')}>
                 详细数据
               </Button>
             </Col>
@@ -400,6 +433,24 @@ export default class BarraList extends Component {
               pageSize: 100,
             }}
             id="table2"
+          />
+        </Card>
+        <Card
+          className="hide"
+          loading={loading}
+          bordered={false}
+          style={{ marginTop: 24, textAlign: 'center' }}
+        >
+          <Table
+            rowKey={record => record.index}
+            size="small"
+            columns={columns3}
+            dataSource={tableData3}
+            pagination={{
+              style: { marginBottom: 0 },
+              pageSize: 100,
+            }}
+            id="table3"
           />
         </Card>
       </Fragment>

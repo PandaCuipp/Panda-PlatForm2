@@ -78,7 +78,7 @@ export default class BrinsonDetail extends Component {
         //表头
         const columns = [
           {
-            title: '行业/项目',
+            title: '组合/行业',
             dataIndex: 'col0',
             key: 'col0',
           },
@@ -111,10 +111,6 @@ export default class BrinsonDetail extends Component {
   }
 
   componentWillUnmount() {
-    // const { dispatch } = this.brinson;
-    // dispatch({
-    //   type: 'brinson/clear',
-    // });
   }
 
   //下载
@@ -124,11 +120,6 @@ export default class BrinsonDetail extends Component {
   }
 
   render() {
-    
-    console.log("Brinson归因明细:")
-    console.log(this.state);
-    console.log(this.props);
-
     const { brinson, loading } = this.props;
     const { strategyInfo } = brinson;
     const { columns, tableData } = this.state;

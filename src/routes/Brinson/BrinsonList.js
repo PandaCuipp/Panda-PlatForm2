@@ -123,7 +123,7 @@ export default class BrinsonList extends Component {
 
         const columns = [
           {
-            title: '项目',
+            title: '组合/行业',
             dataIndex: 'x',
             key: 'x',
           },
@@ -147,7 +147,7 @@ export default class BrinsonList extends Component {
         }
         const columns2 = [
           {
-            title: '项目',
+            title: '组合/行业',
             dataIndex: 'x',
             key: 'x',
           },
@@ -180,7 +180,7 @@ export default class BrinsonList extends Component {
         }
         const columns3 = [
           {
-            title: '项目',
+            title: '组合/行业',
             dataIndex: 'col0',
             key: 'col0',
           },
@@ -220,11 +220,6 @@ export default class BrinsonList extends Component {
   }
 
   componentWillUnmount() {
-    // console.log('componentWillUnmount');
-    // const { dispatch } = this.props;
-    // dispatch({
-    //   type: 'brinson/clear',
-    // });
   }
 
   //绘制图表1
@@ -369,7 +364,6 @@ export default class BrinsonList extends Component {
   };
 
   //替代锚点的方案
-  //参考：https://blog.csdn.net/mrhaoxiaojun/article/details/79960792
   scrollToAnchor = anchorName => {
     if (anchorName) {
       // 找到锚点
@@ -400,7 +394,6 @@ export default class BrinsonList extends Component {
 
 
   codeChangeHandle = (value)=>{
-    //console.log("selectedValue:"+value);
     this.setState({
       index_code:value,
     });
@@ -411,9 +404,6 @@ export default class BrinsonList extends Component {
   }
 
   render() {
-    console.log("Brinson归因:")
-    console.log(this.state);
-    console.log(this.props);
     const { brinson, loading } = this.props;
     const { columns, tableData, columns2, tableData2,columns3, tableData3, strategyInfo } = this.state;
 
@@ -427,12 +417,12 @@ export default class BrinsonList extends Component {
 
         <Card loading={loading} bordered={true} style={{ textAlign: 'center' }}>
           <Row>
-            <Col md={12} sm={12}>
+            <Col md={8} sm={8}>
               <p>
                 策略：<span>{strName}</span>
               </p>
             </Col>
-            <Col  md={12} sm={12}>
+            <Col  md={8} sm={8}>
             样本空间：
               <Select label="" onChange={this.codeChangeHandle} defaultValue={this.state.index_code} style={{ width: 250 }}>
                 <Option value="000300">沪深300</Option>
@@ -440,7 +430,7 @@ export default class BrinsonList extends Component {
                 <Option value="000906">中证800</Option>
               </Select>
             </Col>
-            <Col md={12} sm={12}>
+            <Col md={8} sm={8}>
               <p>
                 日期：<span>
                   {this.state.begin_date}~{this.state.end_date}

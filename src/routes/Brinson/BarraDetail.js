@@ -76,7 +76,7 @@ export default class BarraDetail extends Component {
 
 			//表头
 			const columns = [{
-				title: '行业/项目',
+				title: '组合/行业',
 				dataIndex: 'col0',
 				key: 'col0',
 			}, ];
