@@ -73,8 +73,6 @@ const CreateForm = Form.create()(props => {
   //开始上传
   const handleUpload = callback => {
     const formData = new FormData();
-
-    console.log(fileList);
     if (!fileList || fileList.length <= 0) {
       console.log('未选择上传的文件');
       callback('');
@@ -286,8 +284,6 @@ export default class FactorMessage extends PureComponent {
       type: 'factor_model/fetch',
     }).then(() => {
       const { factorData } = this.props.factor_model;
-      console.log('this.props');
-      console.log(this.props);
       if (!factorData) {
         return;
       }
@@ -444,8 +440,6 @@ export default class FactorMessage extends PureComponent {
 
   //flag:1-新增；2-修改
   showModal = (flag, entity) => {
-    console.log('showModal');
-
     this.setState({
       modalAction: flag,
       factorEntity: entity,
@@ -458,13 +452,6 @@ export default class FactorMessage extends PureComponent {
   //action:1-新增，2修改；
   //fields:弹出框字段
   handleAdd = (action, fields) => {
-    console.log('handleAdd:');
-    console.log(fields);
-
-    // this.setState({
-    //     confirmLoading: false,
-    //   });
-
     if (action === 1) {
       //新增
       this.props
@@ -575,8 +562,6 @@ export default class FactorMessage extends PureComponent {
   //==============
   //type:1-个人，2-部门
   fetch = (value, type) => {
-    console.log('fetch:' + value);
-
     if (timeout) {
       clearTimeout(timeout);
       timeout = null;
@@ -593,8 +578,6 @@ export default class FactorMessage extends PureComponent {
       type: 'factor_model/fetch',
     }).then(() => {
       const { factorData } = this.props.factor_model;
-      console.log('this.props');
-      console.log(this.props);
       if (!factorData) {
         return;
       }
