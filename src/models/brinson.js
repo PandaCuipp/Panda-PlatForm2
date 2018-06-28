@@ -83,9 +83,9 @@ export default {
           response = common.setQueryVariable(response,"index_code",payload.index_code);
         }
       }
-      console.log("进入getUrlParamStr:");
-      console.log(payload);
-      console.log(response);
+      //console.log("进入getUrlParamStr:");
+      //console.log(payload);
+      //console.log(response);
       yield put({
         type: 'saveUrlParamStr',
         payload: {
@@ -108,7 +108,7 @@ export default {
       if(payload.urlParamStr == ''){
         return {...state,...{_:new Date()}};
       }else{
-        console.log("保存UrlParamStr:"+payload.urlParamStr);
+        //console.log("保存UrlParamStr:"+payload.urlParamStr);
         return {
         ...state,
         ...payload,

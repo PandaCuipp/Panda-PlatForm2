@@ -2,20 +2,20 @@ import { stringify } from 'qs';
 import request from '../utils/request';
 
 // 是否禁用代理
-const noProxy = process.env.NO_PROXY === 'true';
-//const noProxy = true;
+//const noProxy = process.env.NO_PROXY === 'true';
+const noProxy = true;
 
 const server1 = 'http://192.168.250.12:30000';
 const server2 = 'http://quant-dev.phfund.com.cn';
 const server1s = 'https://192.168.250.12:30000';
 const server2s = 'https://quant-dev.phfund.com.cn';
 
-const api1 = '/api1';
-const api2 = '/api2';
-// const api1 = server1;
-// const api2 = server2;
-// const api1s = server1s;
-// const api2s = server2s;
+//const api1 = '/api1';
+//const api2 = '/api2';
+const api1 = server1;
+const api2 = server2;
+const api1s = server1s;
+const api2s = server2s;
 //========================请求Brinson模块数据=============================
 
 //获取策略详情

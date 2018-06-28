@@ -76,14 +76,12 @@ export default class BrinsonList extends Component {
       index_code:index_code,
     });
 
-    this.props
-      .dispatch({
+    this.props.dispatch({
         type: 'brinson/getStrategyInfo',
         payload: {
           strategy_id,
         },
-      })
-      .then(() => {
+      }).then(() => {
         if(!this.props.brinson.strategyInfo){
           return;
         }
@@ -411,7 +409,7 @@ export default class BrinsonList extends Component {
     }
   };
 
-
+  //选择样本空间
   codeChangeHandle = (value)=>{
     this.setState({
       index_code:value,
@@ -423,7 +421,11 @@ export default class BrinsonList extends Component {
       }
     });
     const{strategy_id, begin_date, end_date} = this.state;
-    this.initData(strategy_id, value, begin_date, end_date);
+    const{ urlParamStr } = this.props.brinson;
+      if(urlParamStr){
+        window.location.href = window.location.href.split("?")[0]+"?"+ common.setQueryVariable(urlParamStr,'index_code',value);  
+      }
+      this.initData(strategy_id, value, begin_date, end_date);
   }
 
   render() {

@@ -30,11 +30,14 @@ export function setQueryVariable(query,variable,value){
     var list = query.split("&");
     var newquery = variable+'='+value;
     for(var i=0;i<list.length;i++){
-        newquery += "&";
-        var pair = list[i].split("=");
-        if(pair[0].toLowerCase() != variable.toLowerCase()) {
-            newquery+=list[i];
+        if(list[i] && list[i] != ""){
+            var pair = list[i].split("=");
+            if(pair[0].toLowerCase() != variable.toLowerCase()) {
+                newquery += "&";
+                newquery+=list[i];
+            }
         }
+        
     }
     return newquery;
 }
