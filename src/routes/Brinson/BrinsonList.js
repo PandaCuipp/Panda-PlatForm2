@@ -39,7 +39,7 @@ export default class BrinsonList extends Component {
   componentDidMount() {
 
     let strategy_id = common.getQueryVariable('stg_id');
-    let index_code = common.getQueryVariable('index_code');
+    // let index_code = common.getQueryVariable('index_code');
     let begin_date = common.getQueryVariable('startdate');
     let end_date = common.getQueryVariable('enddate');
     let usercode = common.getQueryVariable('usercode');
@@ -49,7 +49,7 @@ export default class BrinsonList extends Component {
       if(urlParamStr){
         let url = window.location.href +"?"+urlParamStr;
         let strategy_id = common.getQueryVariable('stg_id',url);
-        let index_code = common.getQueryVariable('index_code',url);
+        // let index_code = common.getQueryVariable('index_code',url);
         let begin_date = common.getQueryVariable('startdate',url);
         let end_date = common.getQueryVariable('enddate',url);
         let usercode = common.getQueryVariable('usercode',url);
@@ -57,7 +57,7 @@ export default class BrinsonList extends Component {
           begin_date: begin_date,
           end_date: end_date,
           strategy_id:strategy_id,
-          index_code:index_code,
+          // index_code:index_code,
         });
         window.location.href = url;
       }else{
@@ -73,7 +73,7 @@ export default class BrinsonList extends Component {
       begin_date: begin_date,
       end_date: end_date,
       strategy_id:strategy_id,
-      index_code:index_code,
+      // index_code:index_code,
     });
 
     this.props.dispatch({
