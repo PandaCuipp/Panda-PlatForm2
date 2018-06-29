@@ -48,11 +48,11 @@ export default class BrinsonList extends Component {
       const{urlParamStr} = this.props.brinson;
       if(urlParamStr){
         let url = window.location.href +"?"+urlParamStr;
-        //let strategy_id = common.getQueryVariable('stg_id',url);
+        strategy_id = common.getQueryVariable('stg_id',url);
         index_code = common.getQueryVariable('index_code',url);
         begin_date = common.getQueryVariable('startdate',url);
         end_date = common.getQueryVariable('enddate',url);
-        usercode = common.getQueryVariable('usercode',url);
+        //usercode = common.getQueryVariable('usercode',url);
         this.setState({
           begin_date: begin_date,
           end_date: end_date,
@@ -68,7 +68,9 @@ export default class BrinsonList extends Component {
         type:'brinson/getUrlParamStr',
       }); 
     }
-
+    if(index_code == ""){
+      index_code = this.state.index_code;
+    }
     this.setState({
       begin_date: begin_date,
       end_date: end_date,
@@ -422,10 +424,10 @@ export default class BrinsonList extends Component {
     });
     const{strategy_id, begin_date, end_date} = this.state;
     const{ urlParamStr } = this.props.brinson;
-      if(urlParamStr){
-        window.location.href = window.location.href.split("?")[0]+"?"+ common.setQueryVariable(urlParamStr,'index_code',value);  
-      }
-      //this.initData(strategy_id, value, begin_date, end_date);
+    if(urlParamStr){
+      window.location.href = window.location.href.split("?")[0]+"?"+ common.setQueryVariable(urlParamStr,'index_code',value);  
+    }
+    this.initData(strategy_id, value, begin_date, end_date);
   }
 
   render() {
