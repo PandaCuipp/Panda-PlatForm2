@@ -90,7 +90,7 @@ export default class BrinsonList extends Component {
         this.setState({ strategyInfo: this.props.brinson.strategyInfo });
       });
 
-      this.initData(strategy_id, this.state.index_code, begin_date, end_date)
+      this.initData(strategy_id, index_code, begin_date, end_date)
   }
 
   initData=(strategy_id, index_code, begin_date, end_date)=>{

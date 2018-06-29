@@ -94,7 +94,7 @@ const CreateForm = Form.create()(props => {
             fileList:[],
           });
 
-          callback(filepath);
+          callback(filepath.filepath);
         }
       }
     });
