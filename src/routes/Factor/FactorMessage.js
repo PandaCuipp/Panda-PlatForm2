@@ -81,19 +81,19 @@ const CreateForm = Form.create()(props => {
     oReq.onreadystatechange = ( () => {
       if(oReq.readyState == 4){
         if(oReq.status == 200){
-          let filepath = oReq.responseText;
-          if(!filepath){
+          var data = oReq.responseText;
+          if(!data){
             parentThis.setState({
               confirmLoading: false,
             });
             message.error('因子文件上传失败');
             return;
           }
-
           parentThis.setState({
             fileList:[],
           });
-
+          var filepath = eval('(' + data + ')');
+          console.log(filepath.filepath);
           callback(filepath.filepath);
         }
       }
