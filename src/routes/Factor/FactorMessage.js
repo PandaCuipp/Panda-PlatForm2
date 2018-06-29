@@ -27,11 +27,6 @@ const { TextArea } = Input;
 const Option = Select.Option;
 
 const CreateForm = Form.create()(props => {
-  // this.state = {
-  //   fileList: [],
-  //   uploading: false,
-  // }
-
   const {
     dispatch,
     parentThis,
@@ -72,73 +67,47 @@ const CreateForm = Form.create()(props => {
 
   //开始上传
   const handleUpload = callback => {
-    console.log('fileList');
-    console.log(fileList);
-    // let req = new XMLHttpRequest();
-    // req.open("post","https://quant-dev.phfund.com.cn/quant-policymanager/factorfile",true);
-    // req.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
-    // req.onreadystatechange(() => {
-    //   console.log('req');
-    //   console.log(req);
-    // )};
-
+    const formData = new FormData();
     if (!fileList || fileList.length <= 0) {
       console.log('未选择上传的文件');
       callback('');
       return;
     }
-    // req.send(fileList[0]);
-    
-     
-    
-     
-    // const formData = new FormData();
-    // if (!fileList || fileList.length <= 0) {
-    //   console.log('未选择上传的文件');
-    //   callback('');
-    //   return;
-    // }
-    // fileList.forEach(file => {
-    //   formData.append('file', file);
-    // });
+    fileList.forEach(file => {
+      formData.append('file', file);
+    });
 
-    // reqwest({
-    //   url: 'https://quant-dev.phfund.com.cn/quant-policymanager/factorfile',
-    //   method: 'post',
-    //   processData: false,
-    //   data: fileList,
-    //   success: data => {
-    //     console.log('success data');
-    //     console.log(data);
+    const oReq = new XMLHttpRequest();
+    oReq.onreadystatechange = ( () => {
+      if(oReq.readyState == 4){
+        if(oReq.status == 200){
+          let filepath = oReq.responseText;
+          if(!filepath){
+            parentThis.setState({
+              confirmLoading: false,
+            });
+            message.error('因子文件上传失败');
+            return;
+          }
 
-    //     let filepath = data.filepath;
-    //     if (!filepath) {
-    //       parentThis.setState({
-    //         confirmLoading: false,
-    //       });
-    //       message.error('因子文件上传失败');
-    //       return;
-    //     }
+          parentThis.setState({
+            fileList:[],
+          });
 
-    //     parentThis.setState({
-    //       fileList: [],
-    //     });
-    //     callback(filepath);
-    //   },
-    //   error: error => {
-    //     console.log('error');
-    //     console.log(error);
-    //     parentThis.setState({
-    //       confirmLoading: false,
-    //     });
-    //     message.error('因子文件上传失败');
-    //   },
-    // });
+          callback(filepath);
+        }
+      }
+    });
+
+    oReq.open("post","https://quant-dev.phfund.com.cn/quant-policymanager/factorfile");
+    oReq.send(formData);
+    return false;
   };
 
   //添加上传文件
   const addFile = file => {
     console.log('addFile:');
+    console.log(file);
     if (file) {
       if (fileList.filter(item => item.name === file.name).length > 0) {
         message.warn('【' + file.name + '】文件已添加');
