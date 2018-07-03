@@ -106,14 +106,10 @@ const CreateForm = Form.create()(props => {
 
   //添加上传文件
   const addFile = file => {
-    console.log('addFile:');
-    console.log(file);
+
     if (file) {
-      if (fileList.filter(item => item.name === file.name).length > 0) {
-        message.warn('【' + file.name + '】文件已添加');
-      }
-      fileList.push(file);
-      let newfileList = fileList.slice();
+      let newfileList = [];
+      newfileList.push(file);
       parentThis.setState({
         fileList: newfileList,
       });
