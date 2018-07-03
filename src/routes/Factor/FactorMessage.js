@@ -602,6 +602,14 @@ export default class FactorMessage extends PureComponent {
         title: '文件名称',
         dataIndex: 'filepath',
         key: 'filepath',
+        render: (text, record) => {
+          if(record.filepath)
+          {
+            let arr = record.filepath.split("/");
+            return arr[arr.length-1];
+          }
+          return "";
+        },
       },
       {
         title: '上传时间',
@@ -660,6 +668,14 @@ export default class FactorMessage extends PureComponent {
         title: '文件名称',
         dataIndex: 'filepath',
         key: 'filepath',
+        render: (text, record) => {
+          if(record.filepath)
+          {
+            let arr = record.filepath.split("/");
+            return arr[arr.length-1];
+          }
+          return "";
+        },
       },
       {
         title: '提交时间',
