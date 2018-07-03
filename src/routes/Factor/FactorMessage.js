@@ -69,7 +69,7 @@ const CreateForm = Form.create()(props => {
   const handleUpload = callback => {
     const formData = new FormData();
     if (!fileList || fileList.length <= 0) {
-      console.log('未选择上传的文件');
+      //console.log('未选择上传的文件');
       callback('');
       return;
     }
@@ -616,7 +616,11 @@ export default class FactorMessage extends PureComponent {
         dataIndex: 'uploaddate',
         key: 'uploaddate',
         render: (text, record) => {
-          return new Date(record.uploaddate).Format('yyyy/MM/dd hh:mm');
+          if(record.uploaddate){
+            return record.uploaddate.slice(0,16).replace("T"," ");
+          }
+          return "";
+          //return new Date(record.uploaddate).Format('yyyy/MM/dd hh:mm');
         },
       },
       {
@@ -682,7 +686,11 @@ export default class FactorMessage extends PureComponent {
         dataIndex: 'uploaddate',
         key: 'uploaddate',
         render: (text, record) => {
-          return new Date(record.uploaddate).Format('yyyy/MM/dd hh:mm');
+          if(record.uploaddate){
+            return record.uploaddate.slice(0,16).replace("T"," ");
+          }
+          return "";
+          //return new Date(record.uploaddate).Format('yyyy/MM/dd hh:mm');
         },
       },
       {
