@@ -86,6 +86,7 @@ export default class BrinsonDetail extends Component {
         if(!columnsData || !indexData){
           return;
         }
+
         //表头
         const columns = [
           {
@@ -126,8 +127,26 @@ export default class BrinsonDetail extends Component {
 
   //下载
   downloadExcel = (id,excelName)=>{
-    var tableInnerHtml = $("#"+ id).find("table").html();
-    exportExcel.exprotTableHtmlExcel(tableInnerHtml,excelName);
+    //var tableInnerHtml = $("#"+ id).find("table").html();
+    //exportExcel.exprotTableHtmlExcel(tableInnerHtml,excelName);
+    const {columns,tableData} = this.state;
+    let dataTable = [];
+    let item = [];
+    for(let i=0;i<columns.length;i++){
+      item.push(columns[i].title);
+    }
+    dataTable.push(item);
+
+    for(let i=0;i<tableData.length;i++){
+      item=[];
+      for(let j=0;j<columns.length;j++){
+          item.push(tableData[i]['col'+j]);
+      }
+      dataTable.push(item);
+    }
+    
+    exportExcel.exprotArrayCSV(dataTable,excelName);
+    //exportExcel.exportArrayExcel(dataTable,excelName);
   }
 
   render() {

@@ -36,11 +36,47 @@ export function exportExcel(dataTable,excelName) {//整个表格拷贝到EXCEL�
 	}
 	var tableInnerHtml = getTableInnerHtml(dataTable);
 
-	exprotTableHtml(tableInnerHtml,excelName)
+	exprotTableHtmlExcel(tableInnerHtml,excelName)
 }
 
+/*
+dataTable:纯二维数组
+excelName:导出excel的名字
+*/
 export function exportArrayExcel(dataTable,excelName){
+	var tableInnerHtml = '';
+	for(var i = 0;i < dataTable.length; i++){
+		tableInnerHtml += '<tr>';
+		for(var j = 0; j < dataTable[i].length; j++){
+			var cellItem = dataTable[i][j];
+			tableInnerHtml +='<td>'+cellItem+'</td>';
+		}
+		tableInnerHtml += '</tr>';
+	}
+	exprotTableHtmlExcel(tableInnerHtml,excelName);
+}
 
+export function exprotArrayCSV(dataTable,excelName){
+	//列标题，逗号隔开，每一个逗号就是隔开一个单元格
+      let str = '';
+      //增加\t为了不让表格显示科学计数法或者其他格式
+      for(let i = 0 ; i < dataTable.length ; i++ ){
+      	let hang = dataTable[i];
+        for(let j=0;j<hang.length;j++){
+            str+=`${hang[j] + '\t'},`;     
+        }
+        str+='\n';
+      }
+      //encodeURIComponent解决中文乱码
+      let uri = 'data:text/csv;charset=utf-8,\ufeff' + encodeURIComponent(str);
+      //通过创建a标签实现
+      var link = document.createElement("a");
+      link.href = uri;
+      //对下载的文件命名
+      link.download =  excelName + ".csv";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
 }
 
 export function exprotTableHtmlExcel(tableInnerHtml,excelName){
@@ -62,7 +98,6 @@ export function exprotTableHtmlExcel(tableInnerHtml,excelName){
 	//a链接点击
 	divHtml += ' <a href="#" id="'+aClickId+'" ></a>';//提供给下面自定义文件名的操作
 	//构建table
-	
 	divHtml += '<table id="'+tableid+'" >'+ tableInnerHtml +'</table>';
 	divHtml += '</div>';
 	$("body").append(divHtml);
