@@ -145,8 +145,8 @@ export default class BrinsonDetail extends Component {
       dataTable.push(item);
     }
     
-    exportExcel.exprotArrayCSV(dataTable,excelName);
-    //exportExcel.exportArrayExcel(dataTable,excelName);
+    //exportExcel.exprotArrayCSV(dataTable,excelName);
+    exportExcel.exportArrayExcel(dataTable,excelName);
   }
 
   render() {
