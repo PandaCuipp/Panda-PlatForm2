@@ -104,43 +104,51 @@ export function exprotTableHtmlExcel(tableInnerHtml,excelName){
 
 	//$("#"+tableid).after(ahtml);
 	if(getExplorer()=='ie') {
-	    alert('Excel对象无法创建，请使用谷歌浏览器');
-        return;
-// 		var curTbl = document.getElementById(tableid);
-// 		var oXL = new ActiveXObject("Excel.Application");
+	    //alert('Excel对象无法创建，请使用其他浏览器');
+        //return;
 
-// 		//创建AX对象excel
-// 		var oWB = oXL.Workbooks.Add();
-// 		//获取workbook对象
-// 		var xlsheet = oWB.Worksheets(1);
-// 		//激活当前sheet
-// 		var sel = document.body.createTextRange();
-// 		sel.moveToElementText(curTbl);
-// 		//把表格中的内容移到TextRange中
-// 		sel.select;
-// 		//全选TextRange中内容
-// 		sel.execCommand("Copy");
-// 		//复制TextRange中内容
-// 		xlsheet.Paste();
-// 		//粘贴到活动的EXCEL中
-// 		oXL.Visible = true;
-// 		//设置excel可见属性
+        var curTbl = document.getElementById(tableid);
+		var oXL,oWB,xlsheet,sel;
 
-// 		try {
-// 			var fname = oXL.Application.GetSaveAsFilename(excelName + ".xls", "Excel Spreadsheets (*.xls), *.xls");
-// 		} catch (e) {
-// 			print("Nested catch caught " + e);
-// 		} finally {
-// 			oWB.SaveAs(fname);
+		try {
+			oXL = new ActiveXObject("Excel.Application");
+			//创建AX对象excel
+			oWB = oXL.Workbooks.Add();
+			//获取workbook对象
+			xlsheet = oWB.Worksheets(1);
+			//激活当前sheet
+			sel = document.body.createTextRange();
+			sel.moveToElementText(curTbl);
+			//把表格中的内容移到TextRange中
+			sel.select;
+			//全选TextRange中内容
+			sel.execCommand("Copy");
+			//复制TextRange中内容
+			xlsheet.Paste();
+			//粘贴到活动的EXCEL中
+			oXL.Visible = true;
+			//设置excel可见属性
+			var fname = oXL.Application.GetSaveAsFilename(excelName + ".xls", "Excel Spreadsheets (*.xls), *.xls");
+		} catch (e) {
+			alert('Excel对象无法创建，请在浏览器安全设置中启动activeX控件，或者换用其他浏览器');
+			return;
+			//print("Nested catch caught " + e);
+		} finally {
+			if(oWB){
+				oWB.SaveAs(fname);
+				oWB.Close(savechanges = false);
+			}
 
-// 			oWB.Close(savechanges = false);
-// 			//xls.visible = false;
-// 			oXL.Quit();
-// 			oXL = null;
-// 			//结束excel进程，退出完成
-// 			//window.setInterval("Cleanup();",1);
-// 			idTmr = window.setInterval("Cleanup();", 1);
-// 		}
+			if(oXL){
+				oXL.Quit();
+				oXL = null;	
+			}
+
+			//结束excel进程，退出完成
+			//window.setInterval("Cleanup();",1);
+			idTmr = window.setInterval("Cleanup();", 1);
+		}
+		
 	} else {
 		tableToExcel(aClickId,tableInnerHtml,excelName)
 	}
