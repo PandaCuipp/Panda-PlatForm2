@@ -104,41 +104,43 @@ export function exprotTableHtmlExcel(tableInnerHtml,excelName){
 
 	//$("#"+tableid).after(ahtml);
 	if(getExplorer()=='ie') {
-		var curTbl = document.getElementById(tableid);
-		var oXL = new ActiveXObject("Excel.Application");
+	    alert('Excel对象无法创建，请使用谷歌浏览器');
+        return;
+// 		var curTbl = document.getElementById(tableid);
+// 		var oXL = new ActiveXObject("Excel.Application");
 
-		//创建AX对象excel
-		var oWB = oXL.Workbooks.Add();
-		//获取workbook对象
-		var xlsheet = oWB.Worksheets(1);
-		//激活当前sheet
-		var sel = document.body.createTextRange();
-		sel.moveToElementText(curTbl);
-		//把表格中的内容移到TextRange中
-		sel.select;
-		//全选TextRange中内容
-		sel.execCommand("Copy");
-		//复制TextRange中内容
-		xlsheet.Paste();
-		//粘贴到活动的EXCEL中
-		oXL.Visible = true;
-		//设置excel可见属性
+// 		//创建AX对象excel
+// 		var oWB = oXL.Workbooks.Add();
+// 		//获取workbook对象
+// 		var xlsheet = oWB.Worksheets(1);
+// 		//激活当前sheet
+// 		var sel = document.body.createTextRange();
+// 		sel.moveToElementText(curTbl);
+// 		//把表格中的内容移到TextRange中
+// 		sel.select;
+// 		//全选TextRange中内容
+// 		sel.execCommand("Copy");
+// 		//复制TextRange中内容
+// 		xlsheet.Paste();
+// 		//粘贴到活动的EXCEL中
+// 		oXL.Visible = true;
+// 		//设置excel可见属性
 
-		try {
-			var fname = oXL.Application.GetSaveAsFilename(excelName + ".xls", "Excel Spreadsheets (*.xls), *.xls");
-		} catch (e) {
-			print("Nested catch caught " + e);
-		} finally {
-			oWB.SaveAs(fname);
+// 		try {
+// 			var fname = oXL.Application.GetSaveAsFilename(excelName + ".xls", "Excel Spreadsheets (*.xls), *.xls");
+// 		} catch (e) {
+// 			print("Nested catch caught " + e);
+// 		} finally {
+// 			oWB.SaveAs(fname);
 
-			oWB.Close(savechanges = false);
-			//xls.visible = false;
-			oXL.Quit();
-			oXL = null;
-			//结束excel进程，退出完成
-			//window.setInterval("Cleanup();",1);
-			idTmr = window.setInterval("Cleanup();", 1);
-		}
+// 			oWB.Close(savechanges = false);
+// 			//xls.visible = false;
+// 			oXL.Quit();
+// 			oXL = null;
+// 			//结束excel进程，退出完成
+// 			//window.setInterval("Cleanup();",1);
+// 			idTmr = window.setInterval("Cleanup();", 1);
+// 		}
 	} else {
 		tableToExcel(aClickId,tableInnerHtml,excelName)
 	}
@@ -213,6 +215,9 @@ function  getExplorer() {
 	if (explorer.indexOf("MSIE") >= 0) {
 		return 'ie';
 	}
+	if (!!window.ActiveXObject || 'ActiveXObject' in window) {
+        return 'ie';
+    }
 	//firefox
 	else if (explorer.indexOf("Firefox") >= 0) {
 		return 'Firefox';
